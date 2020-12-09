@@ -1,30 +1,14 @@
-import package.Shuffle
 import asyncio
 import os
-from package import Players
+from package import Game
+from package.Game import Whole_Game
 from package.Players import Player
 
-# from package.Players import Player
 
-nb_players = Players.Count()
-if nb_players >= 2:
-    player_1 = Players.Player(
-        input("Nom du joueur 1: "), package.Shuffle.Hand())
-    player_2 = Players.Player(
-        input("Nom du joueur 2: "), package.Shuffle.Hand())
-if nb_players >= 3:
-    player_3 = Players.Player(
-        input("Nom du joueur 3: "), package.Shuffle.Hand())
-if nb_players == 4:
-    player_4 = Players.Player(
-        input("Nom du joueur 4: "), package.Shuffle.Hand())
+game = Whole_Game()
+game.initGame()
+game.players[0.info]
 
-player_1.name()
-player_2.name()
-player_3.name()
-
-
-# newPlayer.NextPlayers()
 
 
 # td     - Faire l'ordre de jeu (player 1: <action>, etc...)

@@ -1,14 +1,21 @@
 import asyncio
 import os
-from package import Game
 from package.Game import Whole_Game
 from package.Players import Player
 
 
 game = Whole_Game()
+Current_P = game.CurrentPlayer()
 game.initGame()
-game.players[0.info]
 
+game.Show_Cards(Current_P)
+print("\n")
+game.CurrentPlayer().info
+
+Current_P = game.NextPlayer()
+
+
+# td ATTENTION, POUR QUAND ON VA FAIRE LA BOUCLE DU MAIN, FAIRE +1 a current player à chaque tour
 
 
 # td     - Faire l'ordre de jeu (player 1: <action>, etc...)

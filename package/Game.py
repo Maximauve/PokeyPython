@@ -11,35 +11,31 @@ class Whole_Game:
         return len(self.players)
 
     def initGame(self):
-        available = False
+        nb_players = 1
         players = []
-        while available == False:
+        while nb_players < 2 or nb_players > 4:
             nb_players = input("Combien de joueurs ? (entre 2 et 4) : ")
-            nb_players = int(nb_players)
+            try:
+                nb_players = int(nb_players)
+            except ValueError:
+                print("Vous n'avez pas entré de nombre.\nRéessayez !")
+                nb_players = 1
+                continue
             if nb_players < 2 or nb_players > 4:
                 print("Nombre de joueurs invalide\nRéessayez !")
-            else:
-                available = True
-        if nb_players >= 2:
-            players = players + [Player(
-                input("Nom du joueur 1: "), Hand())]
-            players = players + [Player(
-                input("Nom du joueur 2: "), Hand())]
-        if nb_players >= 3:
-            players = players + [Player(
-                input("Nom du joueur 3: "), Hand())]
-        if nb_players == 4:
-            players = players + [Player(
-                input("Nom du joueur 4: "), Hand())]
+
+        for a in range(nb_players):
+            players += [Player(input(f"Nom du joueur {a+1}: "), Hand())]
         self.players = players
+        return nb_players
 
     def CurrentPlayer(self):
         self.currentplayer = self.currentplayer % len(self.players)
         return self.players[self.currentplayer]
 
     def NextPlayer(self):
-        self.currentplayer = self.currentplayer % len(self.players)
         self.currentplayer += 1
+        self.currentplayer = self.currentplayer % len(self.players)
         return self.players[self.currentplayer]
 
     def Show_Cards(self, player):
@@ -47,10 +43,10 @@ class Whole_Game:
         while validAns == False:
             confirm = input(
                 player.name + ", Voulez vous voir vos cartes? (yes/no)")
-            if confirm == "yes" or confirm == "oui" or confirm == "ok":
+            if confirm == "yes" or confirm == "oui" or confirm == "ok" or confirm == "y" or confirm == "Y":
                 player.info()
                 validAns = True
-            elif confirm == "no" or confirm == "non":
+            elif confirm == "no" or confirm == "non" or confirm == "n" or confirm == "N":
                 print("Vous n'avez pas voulu voir vos cartes.")
                 validAns = True
             else:
@@ -90,10 +86,10 @@ class Whole_Game:
 # * après dernier joueur --> cartes tirées (fontion Flop)
 
 
-# tour 2:
-# same jusqu'à carte tirée --> qu'une seule cette fois ci (fonction Turn)
-#
+#! Deuxieme TOUR :
 
-# currentplayer = len(self.players)
-# currentplayer = currentplayer % len(self.players)
-# return currentplayer
+#! Check, le joueur peut cheker c’est-à-dire qu’il ne mise pas de somme supplémentaire dans le pot. Il peut cheker seulement si les joueurs d’avant n’ont pas misé eux non plus.
+#! Miser, il décide de mettre dans le pot la somme qu’il souhaite.
+#! Relancer, c’est-à-dire miser une somme plus importante si un joueur a déjà misé.
+#! Suivre, si un joueur a déjà misé, vous égalisé cette mise dans le pot.
+#! Se coucher. Il jette alors ses cartes et se retire définitivement de la partie

@@ -1,6 +1,6 @@
 import random
 
-# *                                                                                    Définition du packet
+# * Définition du packet
 signes = ("coeur", "carreau", "pique", "trefle")
 deck = []
 
@@ -9,7 +9,7 @@ for signe in signes:
         deck.append((valeur, signe))
 
 
-def Hand():  # *                                                                       Définition de la main
+def Hand():  # * Définition de la main
     main = ["", ""]
     y = 0
     while y < 2:

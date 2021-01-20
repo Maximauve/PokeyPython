@@ -44,81 +44,113 @@ class EndGame:
                             return number[i] - 1
 
     def DoublePaire(self, player):
-        # number = self.NumberCheck(self.CheckCards(player))
-        number = [2, 1, 7, 5, 7, 2, 5]
+        number = self.NumberCheck(self.CheckCards(player))
         dblnumber = number
         pair = []
-        poped = 0
-        for _ in range(2):
-            print("range")
-            for i in range(len(dblnumber)-poped):
-                for y in range(len(dblnumber)-poped):
-                    if number[i] - number[y] == 0:
+        poped = False
+        for nb in range(2):
+            if nb == 1:
+                poped = False
+            for i in range(len(dblnumber)):
+                for y in range(len(dblnumber)):
+                    if dblnumber[i] - dblnumber[y] == 0:
                         if i != y:
                             if i > y:
+                                pair.append(dblnumber[i])
                                 dblnumber.pop(i)
                                 dblnumber.pop(y)
-                                poped = 2
+                                poped = True
                             else:
+                                pair.append(dblnumber[i])
                                 dblnumber.pop(y)
                                 dblnumber.pop(i)
-                                poped = 2
+                                poped = True
                             break
-                if poped == 2:
+                if poped == True:
                     break
-        # print(dblnumber)
         if len(dblnumber) == 3:
-            for i in range(3):
-                for y in range(3):
-                    if number[i] - number[y] == 0:
+            poped = False
+            for i in range(len(dblnumber)):
+                for y in range(len(dblnumber)):
+                    if dblnumber[i] - dblnumber[y] == 0:
                         if i != y:
-                            pair.append(dblnumber[i])
-                            dblnumber.pop(i)
-                            dblnumber.pop(y)
-            print(dblnumber)
-            if len(dblnumber) == 1:
+                            if i > y:
+                                pair.append(dblnumber[i])
+                                dblnumber.pop(i)
+                                dblnumber.pop(y)
+                                poped = True
+                            else:
+                                pair.append(dblnumber[i])
+                                dblnumber.pop(y)
+                                dblnumber.pop(i)
+                                poped = True
+                            break
+                if poped == True:
+                    break
+            if len(pair) == 3:
                 pair.sort()
                 if pair[0] == 1:
-                    pair.pop(1)
-                else:
-                    pair.pop(0)
-                print(f"Vous avez une paire de {pair[0]} et de {pair[1]} !")
+                    pair[0],pair[1],pair[2] = pair[1],pair[2],pair[0]
+                print(f"Vous avez deux paires ! Une paire de {pair[1]} et de {pair[2]}")
+                return pair[2] + 11
+            elif len(pair) == 2:
+                pair.sort()
+                if pair[0] == 1:
+                    pair[0],pair[1] = pair[1],pair[0]
+                print(f"Vous avez deux paire ! Une paire de {pair[0]} et de {pair[1]}")
+                return pair[1] + 11
             else:
-                print(f"Vous avez une paire de {pair[0]} et de {pair[1]} !")
-
-            print(number)
-            print(dblnumber)
-            print(pair)
-            if 1 in pair:
-                return 25
-            else:
-                return (pair[1] + 11)
+                return 0   
         else:
             return 0
+            
+
+
+
 
     def Brelan(self, player):
-        number = [1, 7, 5, 7, 1, 7, 2]
-        numbertrié = number.sort()
+        number = self.NumberCheck(self.CheckCards(player))
+        numbertrié = number
         brelan = []
+        poped = False
         # number = self.NumberCheck(self.CheckCards(player))
-        for _ in range(2):
+        for nb in range(2):
+            if nb == 1:
+                poped = False
             for i in range(len(numbertrié)):
                 for y in range(len(numbertrié)):
                     for x in range(len(numbertrié)):
-                        if number[i] == number[y]:
-                            if number[i] == number[x]:
-                                if i != y != x:
+                        if numbertrié[i] == numbertrié[y]:
+                            if numbertrié[i] == numbertrié[x]:
+                                if i != y and i != x and y != x:
                                     brelan.append(numbertrié[i])
-                                    numbertrié.pop(x)
-                                    numbertrié.pop(y)
-                                    numbertrié.pop(i)
-                                    print(numbertrié)
+                                    tab = [x,y,i]
+                                    tab.sort()
+                                    numbertrié.pop(tab[2])
+                                    numbertrié.pop(tab[1])
+                                    numbertrié.pop(tab[0])
+                                    poped = True
+                                    if nb == 1:
+                                       continue
                                     break
-                if len(numbertrié) == 4:
-                    break
-        print(".")
-        if len(numbertrié) == 4:
-            pass
+                    if poped == True:
+                        break
+                if poped == True:
+                    break      
+        if len(brelan) > 0:
+            if len(brelan) > 1:
+                if brelan[0] > brelan[1]:
+                    return brelan[0] + 24
+                else:
+                    if brelan[0] == 1:
+                        return 38
+                    else:
+                        return brelan[1] + 24
+            else:
+                if brelan[0] == 1:
+                    return 38
+                else: 
+                    return brelan[0] + 24
         else:
             return 0
 

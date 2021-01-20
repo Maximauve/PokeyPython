@@ -34,8 +34,7 @@ class EndGame:
         return power
 
     def Paire(self, player):
-        # number = self.NumberCheck(self.CheckCards(player))
-        number = [7, 5, 2, 7, 5, 3, 7]
+        number = self.NumberCheck(self.CheckCards(player))
         for i in range(len(number)-1):
             for y in range(len(number)-1):
                 if number[i] - number[y] == 0:
@@ -97,6 +96,8 @@ class EndGame:
                     pair[0], pair[1], pair[2] = pair[1], pair[2], pair[0]
                 print(
                     f"Vous avez deux paires ! Une paire de {pair[1]} et de {pair[2]}")
+                if pair[2] == 1:
+                    pair[2] = 14
                 return pair[2] + 11
             elif len(pair) == 2:
                 pair.sort()
@@ -104,6 +105,8 @@ class EndGame:
                     pair[0], pair[1] = pair[1], pair[0]
                 print(
                     f"Vous avez deux paire ! Une paire de {pair[0]} et de {pair[1]}")
+                if pair[1] == 1:
+                    pair[1] = 14
                 return pair[1] + 11
             else:
                 return 0
@@ -111,8 +114,7 @@ class EndGame:
             return 0
 
     def Brelan(self, player):
-        # number = self.NumberCheck(self.CheckCards(player))
-        number = [7, 5, 2, 7, 5, 3, 7]
+        number = self.NumberCheck(self.CheckCards(player))
         numbertrié = number
         brelan = []
         poped = False
@@ -141,13 +143,14 @@ class EndGame:
                     break
         brelan.sort()
         if len(brelan) > 1:
-            print(brelan)
-            if brelan[0] > brelan[1] or brelan[0] == 1:
+            if brelan[0] > brelan[1]:
                 brelan[0], brelan[1] = brelan[1], brelan[0]
-            print(brelan)
+            if brelan[1] == 1:
+                brelan[1] = 14
             return brelan[1] + 24
         elif len(brelan) > 0:
-            print(brelan)
+            if brelan[0] == 1:
+                brelan[0] = 14
             return brelan[0] + 24
         else:
             return 0
@@ -158,18 +161,100 @@ class EndGame:
         Paire = self.Paire(player)
         if Brelan != 0:
             if Paire != 0:
-                print("Vous avez un Full!")
+                print("Vous avez un Full !")
                 return Brelan + 13
         else:
             return 0
 
-    # def Suite(self):
+    def Suite(self,player):
+        number = self.NumberCheck(self.CheckCards(player))
+        numbertrié = number
+        numbertrié.sort()
+        tab = []
+        suite = []
+        for i in range(len(numbertrié)-1):
+            if numbertrié[i+1] == numbertrié[i]:
+                tab.append(i)
+        for x in tab:
+            numbertrié.pop(x)
+        if numbertrié[0] == 1:
+            numbertrié.pop(0)
+            numbertrié.append(14)
+        for i in range(len(numbertrié)-1):
+            compt = 0
+            nbrange = 5
+            if len(numbertrié)-i < 5:
+                nbrange = len(numbertrié)-i
+            for a in range(nbrange-1):
+                if numbertrié[i+1+a] - numbertrié[i+a] == 1:
+                    compt += 1
+                else:
+                    continue
+            if compt == 4:
+                suite.append(numbertrié[i])
+        if len(suite) > 0:
+            return suite[len(suite)-1] + 63
+        else:
+            return 0
 
-    # def Couleur(self):
 
-    # def Carre(self):
+    def Couleur(self, player):
+        number = self.NumberCheck(self.CheckCards(player))
+        power = self.PowerCheck(self.CheckCards(player))
+        tabpower = power
+        coul = False
+        for i in range(len(power)):
+            couleur = []
+            couleury = []
+            for y in range(len(power)):
+                if tabpower[i] == tabpower[y] and i != y:
+                    couleur.append(tabpower[y])
+                    couleury.append(y)
+                if len(couleur) == 4:
+                    couleur.append(tabpower[i])
+                    couleury.append(i)
+                    coul = True
+                    break
+            if coul == True:
+                break
+        couleur.sort()
+        couleury.sort()
+        tabnb = []
+        if len(couleur) == 5:
+            for x in couleury:
+                tabnb.append(number[x])
+            tabnb.sort()
+            if tabnb[0] == 1:
+                tabnb[4] = 14
+            return tabnb[4] + 72
+        else:
+            return 0
 
-    # def QuinteFlush(self):
+    def Carre(self,player):
+        number = [1,1,1,4,3,9,1]
+        nbcarre = number
+        nbcarre.sort()
+        carre = []
+        poped = False
+        for i in range(len(nbcarre)):
+            compt = 0
+            for y in range(len(nbcarre)):
+                if nbcarre[i] == nbcarre[y] and i != y:
+                    compt += 1
+                    if compt == 3:
+                        carre.append(nbcarre[i])
+                        poped = True
+                        break
+            if poped == True:
+                break
+        if len(carre) == 1:
+            if carre[0] == 1:
+                carre[0] = 14
+            return carre[0] + 50
+        else:
+            return 0
+
+    #def QuinteFlush(self):
 
     # def QuinteFlushRoyale(self) int:
     # for a in len(number):
@@ -185,6 +270,7 @@ class EndGame:
     # * LE BRELAN: Vous possédez un brelan, si vous avez trois cartes identiques.
     # * LA QUINTE OU SUITE: Vous possédez une suite, si cinq cartes de couleurs différentes se suivent.
     # * LA COULEUR: Vous possédez une couleur si vous avez avec votre main et les cinq cartes de la table, cinq cartes de la même couleur. C’est-à-dire 5 carreaux, cinq cœurs, cinq piques ou cinq trèfles.
+    # * Couleur : SI DEUX MAINS ONT DEUX COULEURS, celui avec la carte la plus haute l'emporte
     # * LE FULL: Vous possédez 3 cartes identiques ainsi qu’une paire.
     # * LE CARRE: Vous possédez 4 cartes identiques.
     # * QUINTE FLUSH: Vous avez cette combinaison à partir du moment où vous avez cinq cartes qui se suivent(LA SUITE) qui sont de même couleur(LA COULEUR).

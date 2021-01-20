@@ -21,7 +21,10 @@ for _ in range(game.initGame()):
 
 # end.Paire(Current_P)
 #end.DoublePaire(Current_P)
-end.Brelan(Current_P)
+#end.Brelan(Current_P)
+#end.Suite(Current_P)
+#end.Couleur(Current_P)
+#end.Carre(Current_P)
 
 # td     - Faire l'ordre de jeu (player 1: <action>, etc...)
 # td     - Choix entre (Check, Relance, Suivre, Tapis, Se Couche)

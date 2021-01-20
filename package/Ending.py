@@ -2,6 +2,9 @@ from .Shuffle import table
 from .Game import Whole_Game
 g = Whole_Game()
 
+# td Ne pas faire de print dans les fonctions de vérifications de cartes --> Ne retourner que la valeur
+# td Les prints devront se faire par rapport à la valeure retournée (ex: si c'est un 5 qui est retourné, alors on sait que c'est une paire de 6)
+
 
 class EndGame:
     def __init__(self, tab=table):
@@ -31,7 +34,8 @@ class EndGame:
         return power
 
     def Paire(self, player):
-        number = self.NumberCheck(self.CheckCards(player))
+        # number = self.NumberCheck(self.CheckCards(player))
+        number = [7, 5, 2, 7, 5, 3, 7]
         for i in range(len(number)-1):
             for y in range(len(number)-1):
                 if number[i] - number[y] == 0:
@@ -44,7 +48,7 @@ class EndGame:
                             return number[i] - 1
 
     def DoublePaire(self, player):
-        number = self.NumberCheck(self.CheckCards(player)) 
+        number = self.NumberCheck(self.CheckCards(player))
         dblnumber = number
         pair = []
         poped = False
@@ -90,26 +94,25 @@ class EndGame:
             if len(pair) == 3:
                 pair.sort()
                 if pair[0] == 1:
-                    pair[0],pair[1],pair[2] = pair[1],pair[2],pair[0]
-                print(f"Vous avez deux paires ! Une paire de {pair[1]} et de {pair[2]}")
+                    pair[0], pair[1], pair[2] = pair[1], pair[2], pair[0]
+                print(
+                    f"Vous avez deux paires ! Une paire de {pair[1]} et de {pair[2]}")
                 return pair[2] + 11
             elif len(pair) == 2:
                 pair.sort()
                 if pair[0] == 1:
-                    pair[0],pair[1] = pair[1],pair[0]
-                print(f"Vous avez deux paire ! Une paire de {pair[0]} et de {pair[1]}")
+                    pair[0], pair[1] = pair[1], pair[0]
+                print(
+                    f"Vous avez deux paire ! Une paire de {pair[0]} et de {pair[1]}")
                 return pair[1] + 11
             else:
-                return 0   
+                return 0
         else:
             return 0
-            
-
-
-
 
     def Brelan(self, player):
-        number = self.NumberCheck(self.CheckCards(player))
+        # number = self.NumberCheck(self.CheckCards(player))
+        number = [7, 5, 2, 7, 5, 3, 7]
         numbertrié = number
         brelan = []
         poped = False
@@ -123,14 +126,14 @@ class EndGame:
                             if numbertrié[i] == numbertrié[x]:
                                 if i != y and i != x and y != x:
                                     brelan.append(numbertrié[i])
-                                    tab = [x,y,i]
+                                    tab = [x, y, i]
                                     tab.sort()
                                     numbertrié.pop(tab[2])
                                     numbertrié.pop(tab[1])
                                     numbertrié.pop(tab[0])
                                     poped = True
                                     if nb == 1:
-                                       continue
+                                        continue
                                     break
                     if poped == True:
                         break
@@ -140,7 +143,7 @@ class EndGame:
         if len(brelan) > 1:
             print(brelan)
             if brelan[0] > brelan[1] or brelan[0] == 1:
-                brelan[0],brelan[1] = brelan[1],brelan[0]
+                brelan[0], brelan[1] = brelan[1], brelan[0]
             print(brelan)
             return brelan[1] + 24
         elif len(brelan) > 0:
@@ -149,11 +152,20 @@ class EndGame:
         else:
             return 0
 
+    def Full(self, player):
+
+        Brelan = self.Brelan(player)
+        Paire = self.Paire(player)
+        if Brelan != 0:
+            if Paire != 0:
+                print("Vous avez un Full!")
+                return Brelan + 13
+        else:
+            return 0
+
     # def Suite(self):
 
     # def Couleur(self):
-
-    # def Full(self):
 
     # def Carre(self):
 

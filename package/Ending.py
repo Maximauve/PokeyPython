@@ -44,7 +44,7 @@ class EndGame:
                             return number[i] - 1
 
     def DoublePaire(self, player):
-        number = self.NumberCheck(self.CheckCards(player))
+        number = self.NumberCheck(self.CheckCards(player)) 
         dblnumber = number
         pair = []
         poped = False
@@ -113,7 +113,6 @@ class EndGame:
         numbertrié = number
         brelan = []
         poped = False
-        # number = self.NumberCheck(self.CheckCards(player))
         for nb in range(2):
             if nb == 1:
                 poped = False
@@ -136,21 +135,17 @@ class EndGame:
                     if poped == True:
                         break
                 if poped == True:
-                    break      
-        if len(brelan) > 0:
-            if len(brelan) > 1:
-                if brelan[0] > brelan[1]:
-                    return brelan[0] + 24
-                else:
-                    if brelan[0] == 1:
-                        return 38
-                    else:
-                        return brelan[1] + 24
-            else:
-                if brelan[0] == 1:
-                    return 38
-                else: 
-                    return brelan[0] + 24
+                    break
+        brelan.sort()
+        if len(brelan) > 1:
+            print(brelan)
+            if brelan[0] > brelan[1] or brelan[0] == 1:
+                brelan[0],brelan[1] = brelan[1],brelan[0]
+            print(brelan)
+            return brelan[1] + 24
+        elif len(brelan) > 0:
+            print(brelan)
+            return brelan[0] + 24
         else:
             return 0
 

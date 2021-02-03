@@ -90,9 +90,9 @@ class EndGame:
             return None
 
     def Suite(self, player, number=None):
-        if number == None:
-            number = self.NumberCheck(self.CheckCards(player))
-        number = [8, 2, 10, 5, 11, 12, 13]
+        # if number == None:
+        #     number = self.NumberCheck(self.CheckCards(player))
+        number = [1 , 4 , 2 , 3 , 4 , 2 , 5 ]
         numbertrié = sorted(number, reverse=True)
         tab = []
         suite = []
@@ -117,21 +117,29 @@ class EndGame:
                 return res + 63, suite, f"Vous avez une suite! Commençant par un {suite[0]} et finissant par un {suite[4]}"
         return None
 
+
+
+
     def Couleur(self, player):
-        number = self.NumberCheck(self.CheckCards(player))
-        power = self.PowerCheck(self.CheckCards(player))
+        #number = self.NumberCheck(self.CheckCards(player))
+        #power = self.PowerCheck(self.CheckCards(player))
+        number = [1 , 4 , 2 , 3 , 4 , 2 , 5 ]
+        power = [ 'coeur' , 'trefle', 'coeur', 'coeur','coeur','carreau','coeur']
         coul = False
         for i in range(len(power)):
             couleur = []
             couleury = []
             nbcolor = []
+            indexcolor = []
             for y in range(len(power)):
                 if power[i] == power[y] and i != y:
                     couleur.append(power[y])
                     couleury.append(y)
                     nbcolor.append(number[y])
+                    indexcolor.append(y)
                 if len(couleur) == 4:
                     nbcolor.append(number[i])
+                    indexcolor.append(i)
                     couleur.append(power[i])
                     couleury.append(i)
                     coul = True
@@ -181,7 +189,7 @@ class EndGame:
         if Couleur:
             Suite = self.Suite(player, Couleur[1])
             if Suite:
-                return Couleur[0] + 9, Suite[1], f"Vous avez une Quinte Flush de {Couleur[3]}s!"
+                return Suite[0] + 9, Suite[1], f"Vous avez une Quinte Flush de {Couleur[3]}s!"
         return None
 
     def QuinteFlushRoyale(self, player):
@@ -189,6 +197,10 @@ class EndGame:
         if QuinteFlush == 94:
             return 94, QuinteFlush[1], f"Vous avez une Quinte Flush Royale"
         return None
+
+ #! Problème au niveau des points 
+
+
 
     # * COMBINAISONS :
 

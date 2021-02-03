@@ -90,8 +90,9 @@ class EndGame:
             return None
 
     def Suite(self, player, number=None):
-        if number == None:
-            number = self.NumberCheck(self.CheckCards(player))
+        # if number == None:
+        #     number = self.NumberCheck(self.CheckCards(player))
+        number = [9, 2, 10, 5, 11, 12, 13]
         numbertrié = sorted(number, reverse=True)
         tab = []
         suite = []
@@ -107,17 +108,28 @@ class EndGame:
         for i in range(len(numbertrié)):
             if i == 0:
                 continue
+
             for y in range(len(numbertrié)):
+                print(numbertrié[y])
+                print(numbertrié[i])
+                print('\n')
                 if numbertrié[y] - numbertrié[i] == 1:
-                    suite.append(numbertrié[y])
-                    compt += 1
-                    break
+                    print("oké")
+                    if i != y:
+                        suite.append(numbertrié[y])
+                        compt += 1
+                        break
+                    else:
+                        compt = 0
+                        suite = []
+                else:
+                    compt = 0
+                    suite = []
             if compt == 4:
                 suite.append(numbertrié[i])
                 suite.sort()
                 res = suite[4]
-                if suite[4] == 14:
-                    suite[4] = "as"
+
                 return res + 63, suite, f"Vous avez une suite! Commençant par un {suite[0]} et finissant par un {suite[4]}"
         return None
 

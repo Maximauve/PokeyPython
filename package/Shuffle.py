@@ -17,12 +17,9 @@ def Hand():  # * Définition de la main
         main[y] = deck[0]
         deck.pop(0)
     return main
-    # print(hand)
-    # print(f"Votre main est : {main}")
-    # print('\n')
 
 
-table = ["", "", "", "", ""]
+cardsOnTable = ["", "", "", "", ""]
 trash = []
 
 
@@ -30,39 +27,30 @@ def Flop():
     trash.append(deck[0])
     deck.pop(0)
     for y in range(3):
-        table[y] = deck[0]
+        cardsOnTable[y] = deck[0]
         deck.pop(0)
     print(
-        f"les tois premières carte tirées sont : {table[0]}, {table[1]}, {table[2]}")
+        f"les tois premières carte tirées sont : {cardsOnTable[0]}, {cardsOnTable[1]}, {cardsOnTable[2]}")
     print('\n')
 
 
 def Turn():
     trash.append(deck[0])
     deck.pop(0)
-    table[3] = deck[0]
+    cardsOnTable[3] = deck[0]
     deck.pop(0)
     print(
-        f"Les cartes présentes sur la table sont : {table[0]}, {table[1]}, {table[2]}, {table[3]}")
+        f"Les cartes présentes sur la Table sont : {cardsOnTable[0]}, {cardsOnTable[1]}, {cardsOnTable[2]}, {cardsOnTable[3]}")
     print('\n')
 
 
 def River():
     trash.append(deck[0])
     deck.pop(0)
-    table[4] = deck[0]
+    cardsOnTable[4] = deck[0]
     deck.pop(0)
-    print(f"Les cartes présentes sur la table sont : {table}")
+    print(f"Les cartes présentes sur la Table sont : {cardsOnTable}")
     print('\n')
-
-
-# td Mélanger le paquet dès le début --> donner les cartes dans l'ordre et bruler pour flop, turn et river
-
-class EndGame:
-    def __init__(self, cards):
-        self.cards = table
-
-    # def Paire(self):
 
     # * COMBINAISONS :
 

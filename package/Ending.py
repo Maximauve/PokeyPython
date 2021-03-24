@@ -1,13 +1,14 @@
 from .Shuffle import cardsOnTable
-from .Game import wholeGame as g
+from .Game import wholeGame
 
 
 #! Return des fonctions:
-# * Value[0] --> Retourne le nombre de points rapportés par la valeure
-# * Value[1] --> Retourne la valeure gagnée
+# * Value[0] --> Retourne le nombre de points rapportés par la valeur
+# * Value[1] --> Retourne la valeur gagnée
 # * Value[2] --> Complément (optionnel)
 
 
+# td Mattéo, vérifies les petits trucs chiants, pour les double paire et full (gérer le cas de quand ils ont tous les deux le même combo fort)
 class endGame:
     def __init__(self, tab=cardsOnTable):
         self.tab = tab
@@ -89,7 +90,7 @@ class endGame:
 
     def Quads(self, player):
         numbers = self.numberCheck(self.checkCards(player))
-        nbQuads = number
+        nbQuads = numbers
         nbQuads.sort()
         quads = []
         poped = False
@@ -177,22 +178,94 @@ class endGame:
         return None
 
     def royalFlush(self, player):
-        royale = self.QuinteFlush(player)
+        royale = self.straightFlush(player)
         if royale == 94:
-            return 94, QuinteFlush[1]
+            return 94, straightFlush[1]
         return None
 
-# * COMBINAISONS :
+    def finalCheck(self, game):
 
-# * LA PAIRE : Si vous possédez deux cartes identiques.
-# * ATTENTION: Si deux joueurs finissent une manche avec chacun une paire c’est celui qui aura la carte la plus forte qui remporte le pot.
-# * Exemple: entre une paire de 6 et une paire de roi, c’est celui qui a la paire de roi qui gagne.
-# * LA DOUBLE PAIRE: Si vous possédez deux paires de cartes.
-# * LE BRELAN: Vous possédez un brelan, si vous avez trois cartes identiques.
-# * LA QUINTE OU SUITE: Vous possédez une suite, si cinq cartes de couleurs différentes se suivent.
-# * LA COULEUR: Vous possédez une couleur si vous avez avec votre main et les cinq cartes de la table, cinq cartes de la même couleur. C’est-à-dire 5 carreaux, cinq cœurs, cinq piques ou cinq trèfles.
-# * Couleur : SI DEUX MAINS ONT DEUX COULEURS, celui avec la carte la plus haute l'emporte
-# * LE FULL: Vous possédez 3 cartes identiques ainsi qu’une paire.
-# * LE CARRE: Vous possédez 4 cartes identiques.
-# * QUINTE FLUSH: Vous avez cette combinaison à partir du moment où vous avez cinq cartes qui se suivent(LA SUITE) qui sont de même couleur(LA COULEUR).
-# * QUINTE FLUSH ROYALE: Cette combinaison est la plus forte que vous puissiez avoir. Pour avoir une quinte flush royal il faut les cinq plus grosses cartes du jeu qui se suivent c’est-à-dire: l’as, le roi, la dame, le valet et le 10, et que c’est cinq cartes soient d’une seule et même couleur.
+        nbPlayer = game.Count()
+        currentPlayer = game.currentPlayer()
+
+        for _ in range(nbPlayer):
+            print(currentPlayer.hand)
+           # time.sleep(3)
+            if self.royalFlush(currentPlayer):
+                print(f"{currentPlayer.name}, Vous avez une Quinte Flush Royale !")
+                currentPlayer.points += self.royalFlush(currentPlayer)[0]
+
+            elif self.straightFlush(currentPlayer):
+                # a voir
+                print(
+                    f"{currentPlayer.name}, Vous avez une Quinte Flush de {self.straightFlush(currentPlayer)[1]} !")
+                currentPlayer.points += self.straightFlush(currentPlayer)[0]
+            elif self.Quads(currentPlayer):
+                print(
+                    f"{currentPlayer.name}, Vous avez un carré de {self.Quads(currentPlayer)[1]} !")
+                currentPlayer.points += self.Quads(currentPlayer)[0]
+
+            elif self.Full(currentPlayer):
+                print(
+                    f"{currentPlayer.name}, Vous avez un full ! Brelan de {self.Full(currentPlayer)[1][0]} et Paire de {self.Full(currentPlayer)[1][1]} !")
+                currentPlayer.points += self.Full(currentPlayer)[0]
+
+            elif self.Flush(currentPlayer):
+                print(
+                    f"{currentPlayer.name}, Vous avez une couleur de {self.Flush(currentPlayer)[2]} !")
+                currentPlayer.points += self.Flush(currentPlayer)[0]
+
+            elif self.Straight(currentPlayer):
+                print(
+                    f"{currentPlayer.name}, Vous avez une suite ! Commençant par un {self.Straight(currentPlayer)[1][0]} et finissant par un {self.Straight(currentPlayer)[1][4]} !")
+                currentPlayer.points += self.Straight(currentPlayer)[0]
+
+            elif self.Trips(currentPlayer):
+                print(
+                    f"{currentPlayer.name}, Vous avez un Brelan de {self.Trips(currentPlayer)[1]} !")
+                currentPlayer.points += self.Trips(currentPlayer)[0]
+
+            elif self.twoPair(currentPlayer):
+                print(
+                    f"{currentPlayer.name}, Vous avez une Double Paire de {self.twoPair(currentPlayer)[1][0]} et de {self.twoPair(currentPlayer)[1][1]} !")
+                currentPlayer.points += self.twoPair(currentPlayer)[0]
+
+            elif self.Pair(currentPlayer):
+                print(
+                    f"{currentPlayer.name}, Vous avez une Paire de {self.Pair(currentPlayer)[1]} !")
+                currentPlayer.points += self.Pair(currentPlayer)[0]
+
+            else:
+                print(
+                    f"{currentPlayer.name}, malheurement vous n'avez pas de main...")
+
+            print(
+                f"{currentPlayer.name}, vous marquez {currentPlayer.points} de points")
+            print("\n\n")
+            currentPlayer = game.nextPlayer()
+
+    def whoWon(self, game):
+        nbPlayer = game.Count()
+        currentPlayer = game.currentPlayer()
+
+        nbPointWinner = 0
+        egaux = []
+        for _ in range(nbPlayer):
+            if currentPlayer.points > nbPointWinner:
+                nbPointWinner = currentPlayer.points
+                winner = currentPlayer
+                multiWin = False
+            elif currentPlayer.points == nbPointWinner and nbPointWinner != 0:
+                multiWin = True
+                egaux.append(currentPlayer)
+            currentPlayer = game.nextPlayer()
+
+        if multiWin:
+            print("ouais y en a plusieurs mais tkt on fait ça plus tard")
+            # partage = 0
+            # gain = 0
+            # partage = Toute la mise
+            # gain = partage / len(egaux)
+            # for x in egaux:
+            #     x.money += gain
+        #! faire le print du winner ici

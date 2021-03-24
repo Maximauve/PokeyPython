@@ -1,13 +1,16 @@
 from .Players import Player
 from .Shuffle import Hand
 
+# td Faire NextPlayer (tro bi1)
+# td  --> Faire en sorte qu'il ne change jamais, et qu'il se fasse par rapport à currentPlayer
+
 
 class wholeGame:
     def __init__(self):
         self.players = []
-        self.currentPlayer = 0
+        self.indexPlayer = 0
 
-    def count(self):
+    def Count(self):
         return len(self.players)
 
     def initGame(self):
@@ -25,18 +28,34 @@ class wholeGame:
                 print("Nombre de joueurs invalide\nRéessayez !")
 
         for a in range(nbPlayers):
-            players += [Player(input(f"Nom du joueur {a+1}: "), hand())]
+            players += [Player(input(f"Nom du joueur {a+1}: "), Hand())]
         self.players = players
         return nbPlayers
 
     def currentPlayer(self):
-        self.currentplayer = self.currentplayer % len(self.players)
-        return self.players[self.currentplayer]
+        self.indexPlayer = self.indexPlayer % len(self.players)
+        return self.players[self.indexPlayer]
 
     def nextPlayer(self):
-        self.currentplayer += 1
-        self.currentplayer = self.currentplayer % len(self.players)
-        return self.players[self.currentplayer]
+        if self.indexPlayer + 1 <= self.Count():
+            self.indexPlayer += 1
+        else:
+            self.indexPlayer += 1
+            self.indexPlayer -= self.Count()
+        # self.indexPlayer += 1
+        # self.indexPlayer = self.indexPlayer % len(self.players)
+        return self.players[self.indexPlayer]
+
+    def checkAllIn(self):
+        player = self.currentPlayer()
+        a = len(self.players)
+        compt = 0
+        for _ in range(self.Count()):
+            if player.allIn == True:
+                compt += 1
+        if compt == a:
+            return True
+        return False
 
     def promptCards(self, player):
         validAns = False
@@ -53,24 +72,8 @@ class wholeGame:
                 print(
                     "Erreur, vous n'avez pas saisi \"oui\" ou \"non\". Veuillez réessayer")
 
-
-#! Tour 1:
-#! Joueur 1 et 2 mettent petites et grosses blindes
-#! Current player -> a vous
-#! Voulez vous voir vos cartes? -> Show_Cards
-#! commence au troisième joueur --> il suit ou relance ou se couche
-#! joueur suivant --> check ou suivre ou relance ou se coucher
-#! joueur de petite blinde --> suivre ou se coucher
-
-
-# * après dernier joueur --> cartes tirées (fontion Flop)
-
-
-#! Deuxieme TOUR :
-
-#! Check, le joueur peut cheker c’est-à-dire qu’il ne mise pas de somme supplémentaire dans le pot. Il peut cheker seulement si les joueurs d’avant n’ont pas misé eux non plus.
-#! Miser, il décide de mettre dans le pot la somme qu’il souhaite.
-
-#! Relancer, c’est-à-dire miser une somme plus importante si un joueur a déjà misé.
-#! Suivre, si un joueur a déjà misé, vous égalisé cette mise dans le pot.
-#! Se coucher. Il jette alors ses cartes et se retire définitivement de la partie
+    def wakeUp(self):
+        player = self.currentPlayer()
+        for _ in range(self.Count()):
+            player.status = True
+            player = self.nextPlayer()

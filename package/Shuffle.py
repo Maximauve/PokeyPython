@@ -30,7 +30,7 @@ def Flop():
         cardsOnTable[y] = deck[0]
         deck.pop(0)
     print(
-        f"les tois premières carte tirées sont : {cardsOnTable[0]}, {cardsOnTable[1]}, {cardsOnTable[2]}")
+        f"les trois premières carte tirées sont : {cardsOnTable[0]}, {cardsOnTable[1]}, {cardsOnTable[2]}")
     print('\n')
 
 
@@ -51,6 +51,21 @@ def River():
     deck.pop(0)
     print(f"Les cartes présentes sur la Table sont : {cardsOnTable}")
     print('\n')
+
+
+def All():
+    Flop()
+    # time.sleep(1)
+    Turn()
+    # time.sleep(1)
+    River()
+    # time.sleep(1)
+
+
+def round2():
+    Turn()
+
+    River()
 
     # * COMBINAISONS :
 

@@ -15,18 +15,28 @@ game = wholeGame()
 
 # * Initialisation de la partie
 nbPlayer = game.initGame()
-for _ in range(nbPlayer):
-    currentPlayer = game.currentPlayer()
+currentPlayer = game.currentPlayer()
+for a in range(nbPlayer):
     game.promptCards(currentPlayer)
     print("\n")
-    currentPlayer = game.nextPlayer()
+    game.nextPlayer()
+    currentPlayer = game.currentPlayer()
 
 Print.startGame()
 
 # * Boucle principale du jeu
 n = 1
 while nbPlayer > 0:
-    game.wakeUp()
+
+    for a in [1, 2]:
+        print(a)
+
+    tab = game.sleepingPlayers()
+    print(tab)
+    print(len(tab))
+    for player in tab:
+        print(f"{player.name} va être réveillé")
+        game.wakeUp(player)
 
     Print.nbRound(n)
 
@@ -34,6 +44,7 @@ while nbPlayer > 0:
     table.Choice(game)
 
     if game.checkAllIn():
+        print("DEBUG --> checkAllIn n°1")
         table.allInTotal(1, game, end)
         continue
 
@@ -41,6 +52,7 @@ while nbPlayer > 0:
     table.Choice(game)
 
     if game.checkAllIn():
+        print("DEBUG --> checkAllIn n°2")
         table.allInTotal(2, game, end)
         continue
 
@@ -48,6 +60,7 @@ while nbPlayer > 0:
     table.Choice(game)
 
     if game.checkAllIn():
+        print("DEBUG --> checkAllIn n°3")
         table.allInTotal(3, game, end)
         continue
 
@@ -58,6 +71,8 @@ while nbPlayer > 0:
 
     for _ in range(nbPlayer):
         currentPlayer.showAllCards()
+        game.nextPlayer()
+        currentPlayer = game.currentPlayer()
     end.finalCheck(game)
     end.whoWon(game)
 

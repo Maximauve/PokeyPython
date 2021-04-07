@@ -1,14 +1,12 @@
 from .Players import Player
 from .Shuffle import Hand
 
-# td Faire NextPlayer (tro bi1)
-# td  --> Faire en sorte qu'il ne change jamais, et qu'il se fasse par rapport à currentPlayer
-
 
 class wholeGame:
     def __init__(self):
         self.players = []
         self.indexPlayer = 0
+        self.foldedPlayers = []
 
     def Count(self):
         return len(self.players)
@@ -37,14 +35,10 @@ class wholeGame:
         return self.players[self.indexPlayer]
 
     def nextPlayer(self):
-        if self.indexPlayer + 1 <= self.Count():
-            self.indexPlayer += 1
-        else:
-            self.indexPlayer += 1
-            self.indexPlayer -= self.Count()
-        # self.indexPlayer += 1
-        # self.indexPlayer = self.indexPlayer % len(self.players)
-        return self.players[self.indexPlayer]
+        self.indexPlayer = self.players.index(self.getNextPlayer())
+
+    def getNextPlayer(self):
+        return self.players[(self.indexPlayer + 1) % len(self.players)]
 
     def checkAllIn(self):
         player = self.currentPlayer()
@@ -62,7 +56,7 @@ class wholeGame:
         while validAns == False:
             confirm = input(
                 player.name + ", Voulez vous voir vos cartes? (oui/non)")
-            if confirm == "yes" or confirm == "oui" or confirm == "ok" or confirm == "y" or confirm == "Y":
+            if confirm == "yes" or confirm == "oui" or confirm == "o" or confirm == "y" or confirm == "Y":
                 player.showCards()
                 validAns = True
             elif confirm == "no" or confirm == "non" or confirm == "n" or confirm == "N":
@@ -72,8 +66,16 @@ class wholeGame:
                 print(
                     "Erreur, vous n'avez pas saisi \"oui\" ou \"non\". Veuillez réessayer")
 
-    def wakeUp(self):
-        player = self.currentPlayer()
-        for _ in range(self.Count()):
-            player.status = True
-            player = self.nextPlayer()
+    def foldPlayer(self, player):
+        toPop = self.players.index(player)
+        self.foldedPlayers.append(player)
+        self.players.pop(toPop)
+
+    def sleepingPlayers(self):
+        return self.foldedPlayers
+
+    def wakeUp(self, player):
+        player.status = True
+        toPop = self.foldedPlayers.index(player)
+        self.players.append(player)
+        self.foldedPlayers.pop(toPop)

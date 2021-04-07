@@ -1,5 +1,8 @@
 from .Shuffle import cardsOnTable
 from .Game import wholeGame
+from .Money import table
+
+table = table()
 
 
 #! Return des fonctions:
@@ -58,7 +61,7 @@ class endGame:
             res = self.Pair(player, numberToPop)
             if res:
                 return self.Pair(player)[0] + 12, [self.Pair(player)[1], res[1]]
-            return None
+        return None
 
     def Trips(self, player):
         numbers = self.numberCheck(self.checkCards(player))
@@ -242,7 +245,8 @@ class endGame:
             print(
                 f"{currentPlayer.name}, vous marquez {currentPlayer.points} de points")
             print("\n\n")
-            currentPlayer = game.nextPlayer()
+            game.nextPlayer()
+            currentPlayer = game.currentPlayer()
 
     def whoWon(self, game):
         nbPlayer = game.Count()
@@ -258,13 +262,14 @@ class endGame:
             elif currentPlayer.points == nbPointWinner and nbPointWinner != 0:
                 multiWin = True
                 egaux.append(currentPlayer)
-            currentPlayer = game.nextPlayer()
-
+            game.nextPlayer()
+            currentPlayer = game.currentPlayer()
+        multiWin = False
         if multiWin:
             print("ouais y en a plusieurs mais tkt on fait ça plus tard")
             # partage = 0
             # gain = 0
-            # partage = Toute la mise
+            # partage = table.money
             # gain = partage / len(egaux)
             # for x in egaux:
             #     x.money += gain

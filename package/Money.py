@@ -3,6 +3,10 @@ from .Game import wholeGame
 from .Shuffle import *
 from .Print import *
 
+# td 	--> Pour les blindes : noter qu'ils ont déjà "misés" (la petite blinde a déjà misé 10€, et la grosse 20€)
+# td 	--> Le pot, à donner au vainqueur
+# td 	-->
+
 
 class table:
     def __init__(self, money=0, currentBet=0):
@@ -11,8 +15,6 @@ class table:
 
     def Ante(self, game):  # * Petite blinde / Grosse blinde
         currentPlayer = game.currentPlayer()
-        print(currentPlayer.name)
-        print(game.nextPlayer().name)
         if currentPlayer.wallet > 10:
             print(
                 f"{currentPlayer.name}, vous êtes de petite blinde, vous mettez donc 10€ sur la table.")
@@ -22,15 +24,17 @@ class table:
         else:
             print(f"{currentPlayer.name}, comme vous n'avez pas assez d'argent pour la petite blinde, vous n'avez pas d'autre choix que de faire un tapis")
             self.allIn(currentPlayer)
-        if game.nextPlayer().wallet > 10:
+        if game.getNextPlayer().wallet > 10:
             print(
-                f"{game.nextPlayer().name}, vous êtes de grosse blinde, vous mettez donc 20€ sur la table.")
-            game.nextPlayer().wallet -= 20
+                f"{game.getNextPlayer().name}, vous êtes de grosse blinde, vous mettez donc 20€ sur la table.")
+            game.getNextPlayer().wallet -= 20
             self.currentBet = 20
-            self.money = 20
+            self.money += 20
         else:
-            print(f"{game.nextPlayer()}, comme vous n'avez pas assez d'argent pour la petite blinde, vous n'avez pas d'autre choix que de faire un tapis")
-            self.allIn(game.nextPlayer())
+            print(f"{game.getNextPlayer().name}, comme vous n'avez pas assez d'argent pour la petite blinde, vous n'avez pas d'autre choix que de faire un tapis")
+            self.allIn(game.getNextPlayer())
+        game.nextPlayer()
+        game.nextPlayer()
 
     def Bet(self, player):  # * Mise initiale
         bet = 0
@@ -42,15 +46,30 @@ class table:
                 print("Vous n'avez pas entré de nombre.\nRéessayez !")
                 bet = 0
                 continue
+            if bet > player.wallet:
+                print(
+                    "Vous n'avez pas assez d'argent pour miser cette somme!")
+                bet = 0
+                continue
+        if bet == player.wallet:
+            print("Vous faites Tapis.")
+            self.allin(player)
+            return
         player.wallet -= bet
         self.money += bet
         self.currentBet = bet
         print(f"{player.name}, vous avez misé {self.currentBet}€")
 
     def Call(self, player):  # * Suivre
-        player.wallet -= self.currentBet
-        self.money += self.currentBet
-        print(f"Vous suivez la mise précédente qui est de {self.currentBet}€.")
+        if self.currentBet >= player.wallet:
+            print(
+                f"Vous suivez avec le solde de votre compte qui est de {player.wallet}€.")
+            self.allIn(player)
+        else:
+            player.wallet -= self.currentBet
+            self.money += self.currentBet
+            print(
+                f"Vous suivez la mise précédente qui est de {self.currentBet}€.")
 
     def Raise(self, player):  # * Relancer
         currentRaise = 0
@@ -63,12 +82,17 @@ class table:
                 print("Vous n'avez pas entré de nombre.\nRéessayez !")
                 currentRaise = 0
                 continue
+            if currentRaise > player.wallet:
+                print(
+                    "Vous n'avez pas assez d'argent pour miser cette somme!")
+                currentRaise = 0
+                continue
         player.wallet -= currentRaise
         self.money += currentRaise
         self.currentBet = currentRaise
 
     def Check(self, player):  # * Check
-        print(f"Vous continuez à jouer")
+        print(f"Vous décidez de ne rien faire.")
 
     def allIn(self, player):  # * Tapis
         if player.wallet >= self.currentBet:
@@ -77,38 +101,45 @@ class table:
         player.wallet -= player.wallet
         player.allIn = True
 
-    def Fold(self, player):  # * Se coucher
+    def Fold(self, game, player):  # * Se coucher
         print(f"Vous vous couchez")
         player.status = False
+        game.foldPlayer(player)
 
     def Choice(self, game):
         player = game.currentPlayer()
         nbPlayer = game.Count()
         rep = ""
         while player.status == False:
-            player = game.nextPlayer()
+            game.nextPlayer()
+            player = game.currentPlayer()
         for _ in range(nbPlayer):
             roundPlayer(player)
             if self.currentBet == 0:
-                print("Il n'y a pas encore de mise . Vous pouvez choisir de miser(\"mise\"), de ne rien faire(\"check\"), de faire tapis (\"allin\") ou de vous coucher (\"se coucher\") ")
+                print("Il n'y a pas encore de mise . Vous pouvez choisir de miser(\"mise\"), de ne rien faire(\"check\"), de faire tapis (\"allin\"),de vous coucher (\"se coucher\") ou encore voir vos cartes (\"cartes\") ")
                 print(f"Vous possédez {player.wallet}€ .")
                 while rep != "mise" or rep != "check" or rep != "tapis" or rep != "se coucher":
                     rep = input("Que désirez vous faire ? : ")
                     if rep == "mise":
                         self.Bet(player)
+                        break
                     elif rep == "check":
                         self.Check(player)
+                        break
                     elif rep == "tapis":
                         self.allIn(player)
+                        break
                     elif rep == "se coucher":
-                        self.Fold(player)
+                        self.Fold(game, player)
+                        break
+                    elif rep == "cartes":
+                        player.showCards()
                     else:
                         print(
-                            "mauvaise réponse! veuillez entrer \"mise\", \"check\", \"tapis\" ou \"se coucher\" : ")
-
+                            "Mauvaise réponse! veuillez entrer \"mise\", \"check\", \"tapis\", \"se coucher\" ou \"cartes\" ")
             else:
                 print(
-                    f"La mise est actuellement de {self.currentBet} €. Vous pouvez choisir de suivre (\"suivre\"), de relancer (\"relance\"), de faire tapis (\"tapis\") ou de vous coucher (\"se coucher\")")
+                    f"La mise est actuellement de {self.currentBet} €. Vous pouvez choisir de suivre (\"suivre\"), de relancer (\"relance\"), de faire tapis (\"tapis\"), de vous coucher (\"se coucher\") ou de voir vos cartes (\"cartes\") ")
                 print(f"Vous possédez {player.wallet}€ .")
                 while rep != "relance" or rep != "tapis" or rep != "se coucher" or rep != "suivre":
                     rep = input("Que désirez vous faire ? : ")
@@ -119,21 +150,27 @@ class table:
                         self.allIn(player)
                         break
                     elif rep == "se coucher":
-                        self.Fold(player)
+                        self.Fold(game, player)
                         break
                     elif rep == "suivre":
                         self.Call(player)
                         break
+                    elif rep == "cartes":
+                        player.showCards()
                     else:
                         print(
-                            "mauvaise réponse! veuillez entrer \"suivre\", \"relance\", \"tapis\" ou \"se coucher\"")
-            player = game.nextPlayer()
+                            "Mauvaise réponse! veuillez entrer \"suivre\", \"relance\", \"tapis\", \"se coucher\" ou \"cartes\"")
+            game.nextPlayer()
+            player = game.currentPlayer()
+        self.currentBet = 0
 
     def allInTotal(self, nbRound, game, end):
         nbPlayer = game.Count()
         currentPlayer = game.currentPlayer()
         for _ in range(nbPlayer):
             currentPlayer.showAllCards()
+            game.nextPlayer()
+            currentPlayer = game.currentPlayer()
         if nbRound == 1:
             All()
         elif nbRound == 2:

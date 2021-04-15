@@ -100,6 +100,8 @@ class table:
         self.money += player.wallet
         player.wallet -= player.wallet
         player.allIn = True
+        print("=== DEBUG allIN(ligne Money.103) ===")
+        print(f"Argent sur la table: {self.money}")
 
     def Fold(self, game, player):  # * Se coucher
         print(f"Vous vous couchez")
@@ -177,5 +179,6 @@ class table:
             round2()
         elif nbRound == 3:
             River()
-        end.finalCheck(game)
-        end.whoWon(game)
+
+    def totalMoney(self):
+        return self.money

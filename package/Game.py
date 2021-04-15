@@ -7,6 +7,7 @@ class wholeGame:
         self.players = []
         self.indexPlayer = 0
         self.foldedPlayers = []
+        self.deadPlayers = []
 
     def Count(self):
         return len(self.players)
@@ -76,6 +77,11 @@ class wholeGame:
 
     def wakeUp(self, player):
         player.status = True
-        toPop = self.foldedPlayers.index(player)
+        self.foldedPlayers.insert(0, self.foldedPlayers.pop(
+            self.foldedPlayers.index(player)))
         self.players.append(player)
-        self.foldedPlayers.pop(toPop)
+        self.foldedPlayers.pop(0)
+
+    def Kill(self, player):
+        self.deadPlayers.append(player)
+        self.players.pop(self.players.index(player))

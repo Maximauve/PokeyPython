@@ -11,7 +11,7 @@ table = table()
 # * Value[2] --> Complément (optionnel)
 
 
-# td Mattéo, vérifies les petits trucs chiants, pour les double paire et full (gérer le cas de quand ils ont tous les deux le même combo fort)
+# td Mattéo, vérifies les petits trucs chiants, pour les double paire et full (gérer le cas de quand ils ont tous les deux le même combo fort) ----> si on a le temps (ça sera pas le cas)
 class endGame:
     def __init__(self, tab=cardsOnTable):
         self.tab = tab
@@ -248,12 +248,12 @@ class endGame:
             game.nextPlayer()
             currentPlayer = game.currentPlayer()
 
-    def whoWon(self, game):
+    def whoWon(self, game, totalMoney):
         nbPlayer = game.Count()
         currentPlayer = game.currentPlayer()
 
         nbPointWinner = 0
-        egaux = []
+        equals = []
         for _ in range(nbPlayer):
             if currentPlayer.points > nbPointWinner:
                 nbPointWinner = currentPlayer.points
@@ -261,16 +261,16 @@ class endGame:
                 multiWin = False
             elif currentPlayer.points == nbPointWinner and nbPointWinner != 0:
                 multiWin = True
-                egaux.append(currentPlayer)
+                equals.append(currentPlayer)
             game.nextPlayer()
             currentPlayer = game.currentPlayer()
-        multiWin = False
         if multiWin:
-            print("ouais y en a plusieurs mais tkt on fait ça plus tard")
-            # partage = 0
-            # gain = 0
-            # partage = table.money
-            # gain = partage / len(egaux)
-            # for x in egaux:
-            #     x.money += gain
-        #! faire le print du winner ici
+            winners = ""
+            for x in equals:
+                x.wallet += int(totalMoney / len(equals))
+                winners += f"{x.name}, "
+            print(f"{winners}vous avez tous gagné {int(totalMoney / len(equals))}€ !")
+            return equals
+        print(f"{winner.name}, tu as gagné {totalMoney}€ !")
+        winner.wallet += totalMoney
+        return winner

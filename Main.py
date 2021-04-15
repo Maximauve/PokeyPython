@@ -26,16 +26,12 @@ Print.startGame()
 
 # * Boucle principale du jeu
 n = 1
-while nbPlayer > 0:
+while nbPlayer > 1:
 
-    for a in [1, 2]:
-        print(a)
-
-    tab = game.sleepingPlayers()
-    print(tab)
-    print(len(tab))
+    tab = []
+    for i, _ in enumerate(game.sleepingPlayers()):
+        tab.append(game.sleepingPlayers()[i])
     for player in tab:
-        print(f"{player.name} va être réveillé")
         game.wakeUp(player)
 
     Print.nbRound(n)
@@ -44,36 +40,52 @@ while nbPlayer > 0:
     table.Choice(game)
 
     if game.checkAllIn():
-        print("DEBUG --> checkAllIn n°1")
         table.allInTotal(1, game, end)
-        continue
+        end.finalCheck(game)
+        end.whoWon(game, table.totalMoney())
 
-    Shuffle.Flop()
-    table.Choice(game)
+    else:
+        Shuffle.Flop()
+        table.Choice(game)
 
-    if game.checkAllIn():
-        print("DEBUG --> checkAllIn n°2")
-        table.allInTotal(2, game, end)
-        continue
+        if game.checkAllIn():
+            table.allInTotal(2, game, end)
+            end.finalCheck(game)
+            end.whoWon(game, table.totalMoney())
 
-    Shuffle.Turn()
-    table.Choice(game)
+        else:
+            Shuffle.Turn()
+            table.Choice(game)
 
-    if game.checkAllIn():
-        print("DEBUG --> checkAllIn n°3")
-        table.allInTotal(3, game, end)
-        continue
+            if game.checkAllIn():
+                table.allInTotal(3, game, end)
+                end.finalCheck(game)
+                end.whoWon(game, table.totalMoney())
 
-    Shuffle.River()
-    table.Choice(game)
+            else:
+                Shuffle.River()
+                table.Choice(game)
 
-    Print.endOfRound()
+                Print.endOfRound()
 
-    for _ in range(nbPlayer):
-        currentPlayer.showAllCards()
+                for _ in range(nbPlayer):
+                    currentPlayer.showAllCards()
+                    game.nextPlayer()
+                    currentPlayer = game.currentPlayer()
+                end.finalCheck(game)
+                end.whoWon(game, table.totalMoney())
+
+    for a in range(nbPlayer):
+        print(
+            f"Joueur {a}: Nom: {currentPlayer.name}, argent: {currentPlayer.wallet}")
+        if currentPlayer.wallet == 0:
+            nbPlayer -= 1
+            print(
+                f"{currentPlayer.name}, vous n'avez malheureusement plus d'argent, vous quittez donc la partie.")
+            game.Kill(currentPlayer)
         game.nextPlayer()
         currentPlayer = game.currentPlayer()
-    end.finalCheck(game)
-    end.whoWon(game)
 
     n += 1
+
+print("Fin de Partie, merci d'avoir joué, à très bientôt! :D")

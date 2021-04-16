@@ -21,6 +21,7 @@ class table:
             currentPlayer.wallet -= 10
             self.currentBet = 10
             self.money += 10
+            currentPlayer.bet = self.currentBet
         else:
             print(f"{currentPlayer.name}, comme vous n'avez pas assez d'argent pour la petite blinde, vous n'avez pas d'autre choix que de faire un tapis")
             self.allIn(currentPlayer)
@@ -30,6 +31,7 @@ class table:
             game.getNextPlayer().wallet -= 20
             self.currentBet = 20
             self.money += 20
+            game.getNextPlayer().bet = self.currentBet
         else:
             print(f"{game.getNextPlayer().name}, comme vous n'avez pas assez d'argent pour la petite blinde, vous n'avez pas d'autre choix que de faire un tapis")
             self.allIn(game.getNextPlayer())
@@ -58,6 +60,7 @@ class table:
         player.wallet -= bet
         self.money += bet
         self.currentBet = bet
+        player.bet = self.currentBet
         print(f"{player.name}, vous avez misé {self.currentBet}€")
 
     def Call(self, player):  # * Suivre
@@ -66,14 +69,15 @@ class table:
                 f"Vous suivez avec le solde de votre compte qui est de {player.wallet}€.")
             self.allIn(player)
         else:
-            player.wallet -= self.currentBet
+            player.wallet -= (self.currentBet - player.bet)
             self.money += self.currentBet
+            player.bet = self.currentBet
             print(
-                f"Vous suivez la mise précédente qui est de {self.currentBet}€.")
+                f"Vous vous alignez à la mise précédente qui est de {self.currentBet}€.")
 
     def Raise(self, player):  # * Relancer
         currentRaise = 0
-        while currentRaise <= self.currentBet:
+        while currentRaise <= 0:
             currentRaise = input(
                 f"{player.name}, Combien voulez vous relancer ? :")
             try:
@@ -87,9 +91,11 @@ class table:
                     "Vous n'avez pas assez d'argent pour miser cette somme!")
                 currentRaise = 0
                 continue
+        print(f"Vous avez relancé de {currentRaise}€")
         player.wallet -= currentRaise
         self.money += currentRaise
-        self.currentBet = currentRaise
+        self.currentBet += currentRaise
+        player.bet = self.currentBet
 
     def Check(self, player):  # * Check
         print(f"Vous décidez de ne rien faire.")
@@ -100,8 +106,7 @@ class table:
         self.money += player.wallet
         player.wallet -= player.wallet
         player.allIn = True
-        print("=== DEBUG allIN(ligne Money.103) ===")
-        print(f"Argent sur la table: {self.money}")
+        player.bet = self.currentBet
 
     def Fold(self, game, player):  # * Se coucher
         print(f"Vous vous couchez")
@@ -112,12 +117,9 @@ class table:
         player = game.currentPlayer()
         nbPlayer = game.Count()
         rep = ""
-        while player.status == False:
-            game.nextPlayer()
-            player = game.currentPlayer()
         for _ in range(nbPlayer):
             roundPlayer(player)
-            if self.currentBet == 0:
+            if self.currentBet == 0 and player.allIn == False:
                 print("Il n'y a pas encore de mise . Vous pouvez choisir de miser(\"mise\"), de ne rien faire(\"check\"), de faire tapis (\"allin\"),de vous coucher (\"se coucher\") ou encore voir vos cartes (\"cartes\") ")
                 print(f"Vous possédez {player.wallet}€ .")
                 while rep != "mise" or rep != "check" or rep != "tapis" or rep != "se coucher":
@@ -132,6 +134,7 @@ class table:
                         self.allIn(player)
                         break
                     elif rep == "se coucher":
+                        player.bet = 0
                         self.Fold(game, player)
                         break
                     elif rep == "cartes":
@@ -139,7 +142,7 @@ class table:
                     else:
                         print(
                             "Mauvaise réponse! veuillez entrer \"mise\", \"check\", \"tapis\", \"se coucher\" ou \"cartes\" ")
-            else:
+            elif player.bet != self.currentBet and player.allIn == False:
                 print(
                     f"La mise est actuellement de {self.currentBet} €. Vous pouvez choisir de suivre (\"suivre\"), de relancer (\"relance\"), de faire tapis (\"tapis\"), de vous coucher (\"se coucher\") ou de voir vos cartes (\"cartes\") ")
                 print(f"Vous possédez {player.wallet}€ .")
@@ -152,6 +155,7 @@ class table:
                         self.allIn(player)
                         break
                     elif rep == "se coucher":
+                        player.bet = 0
                         self.Fold(game, player)
                         break
                     elif rep == "suivre":
@@ -164,7 +168,42 @@ class table:
                             "Mauvaise réponse! veuillez entrer \"suivre\", \"relance\", \"tapis\", \"se coucher\" ou \"cartes\"")
             game.nextPlayer()
             player = game.currentPlayer()
+        for _ in range(nbPlayer):
+            folded = False
+            if player.allIn:
+                game.nextPlayer()
+                player = game.currentPlayer()
+                continue
+            while player.bet < self.currentBet:
+                print(
+                    f"{player.name}, vous devez vous alligner à la mise actuelle qui est de {self.currentBet}€")
+                res = ""
+                while res != "oui" or res != "o" or res != "y" or res != "non" or res != "n":
+                    res = input(
+                        "Voulez vous vous mettre à niveau de la mise? (oui/non) : ")
+                    if res == "oui" or res == "o" or res == "y":
+                        print("Vous suivez.")
+                        player.wallet -= (player.bet - self.currentBet)
+                        player.bet = self.currentBet
+                        break
+                    elif res == "non" or res == "n":
+                        player.bet = 0
+                        self.Fold(game, player)
+                        folded = True
+                        break
+                    else:
+                        print(
+                            "Mauvaise réponse! Veuillez entrer \"oui\" ou \"non\"")
+                if folded:
+                    break
+            game.nextPlayer()
+            player = game.currentPlayer()
+
         self.currentBet = 0
+        for _ in range(nbPlayer):
+            player.bet = 0
+            game.nextPlayer()
+            player = game.currentPlayer()
 
     def allInTotal(self, nbRound, game, end):
         nbPlayer = game.Count()

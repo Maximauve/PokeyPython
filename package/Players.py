@@ -3,13 +3,14 @@ import asyncio
 
 
 class Player:
-    def __init__(self, name, hand, wallet=1000, allIn=False, points=0, status=True):
+    def __init__(self, name, hand, wallet=1000, allIn=False, points=0, status=True, bet=0):
         self.name = name
         self.hand = hand
         self.wallet = wallet
         self.allIn = allIn
         self.points = points
         self.status = status
+        self.bet = bet
 
     def showCards(self):
         os.system('cls' if os.name == 'nt' else 'clear')

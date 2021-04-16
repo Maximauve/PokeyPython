@@ -33,6 +33,10 @@ while nbPlayer > 1:
         tab.append(game.sleepingPlayers()[i])
     for player in tab:
         game.wakeUp(player)
+        for _ in range(nbPlayer):
+            currentPlayer.allIn = False
+            game.nextPlayer()
+            currentPlayer = game.currentPlayer()
 
     Print.nbRound(n)
 
@@ -76,8 +80,6 @@ while nbPlayer > 1:
                 end.whoWon(game, table.totalMoney())
 
     for a in range(nbPlayer):
-        print(
-            f"Joueur {a}: Nom: {currentPlayer.name}, argent: {currentPlayer.wallet}")
         if currentPlayer.wallet == 0:
             nbPlayer -= 1
             print(

@@ -266,9 +266,11 @@ class endGame:
             currentPlayer = game.currentPlayer()
         if multiWin:
             winners = ""
+            print(equals)
             for x in equals:
                 x.wallet += int(totalMoney / len(equals))
                 winners += f"{x.name}, "
+                print(winners)
             print(f"{winners}vous avez tous gagné {int(totalMoney / len(equals))}€ !")
             return equals
         print(f"{winner.name}, tu as gagné {totalMoney}€ !")

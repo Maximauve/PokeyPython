@@ -3,14 +3,16 @@ from .Print import *
 import time
 
 # * Définition du packet
-signes = ("coeur", "carreau", "pique", "trefle")
-deck = []
 
-for signe in signes:
-    for valeur in range(1, 14):
-        deck.append((valeur, signe))
 
-random.shuffle(deck)
+def shuffleCards():
+	signes = ("coeur", "carreau", "pique", "trefle")
+	deck = []
+    for signe in signes:
+        for valeur in range(1, 14):
+            deck.append((valeur, signe))
+
+    random.shuffle(deck)
 
 
 def Hand():  # * Définition de la main

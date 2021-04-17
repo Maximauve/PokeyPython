@@ -1,3 +1,5 @@
+
+
 def startGame():
     print("""
 	o--------------------o
@@ -8,10 +10,10 @@ def startGame():
 
 def nbRound(n):
     print(f"""\n
-	o------------o
-	| MANCHE {n}   |
-	o------------o
-	""")
+    o------------o
+    | MANCHE {n}   |
+    o------------o
+    """)
 
 
 def roundPlayer(joueur):
@@ -21,8 +23,9 @@ def roundPlayer(joueur):
     print(f'''
     o--------------------------------------------o
     {phrase}
-    o--------------------------------------------o
-    ''')
+    o--------------------------------------------o''')
+
+
 
 
 def endOfRound():
@@ -55,3 +58,21 @@ def printRiver():
 	|               RIVER               |
 	o-----------------------------------o
 	''')
+
+def printTableVide():
+	print('''
+	o-----------------------------------o
+	|  La table est actuellement vide   |
+	o-----------------------------------o
+	''')
+
+def printTable(cardsOnTable):
+	cards = cardsOnTable
+	phrase = "La table actuelle est "
+	for x in cards:
+		phrase += f"{x} "
+	print(f'''
+    o--------------------------------------------o
+    {phrase}
+    o--------------------------------------------o
+    ''')

@@ -183,7 +183,7 @@ class endGame:
     def royalFlush(self, player):
         royale = self.straightFlush(player)
         if royale == 94:
-            return 94, straightFlush[1]
+            return 94, royale[1]
         return None
 
     def finalCheck(self, game):
@@ -251,7 +251,7 @@ class endGame:
     def whoWon(self, game, totalMoney):
         nbPlayer = game.Count()
         currentPlayer = game.currentPlayer()
-
+        multiWin = False
         nbPointWinner = 0
         equals = []
         for _ in range(nbPlayer):
@@ -259,20 +259,31 @@ class endGame:
                 nbPointWinner = currentPlayer.points
                 winner = currentPlayer
                 multiWin = False
-            elif currentPlayer.points == nbPointWinner and nbPointWinner != 0:
+            elif currentPlayer.points == nbPointWinner:
                 multiWin = True
                 equals.append(currentPlayer)
+                for x in equals:
+                    if x == winner:
+                        break
+                else:
+                    equals.append(winner)
             game.nextPlayer()
             currentPlayer = game.currentPlayer()
         if multiWin:
             winners = ""
-            print(equals)
             for x in equals:
                 x.wallet += int(totalMoney / len(equals))
                 winners += f"{x.name}, "
-                print(winners)
             print(f"{winners}vous avez tous gagné {int(totalMoney / len(equals))}€ !")
             return equals
         print(f"{winner.name}, tu as gagné {totalMoney}€ !")
         winner.wallet += totalMoney
         return winner
+
+    def resetPoints(self,game):
+        nbPlayer = game.Count()
+        currentPlayer = game.currentPlayer()
+        for _ in range(nbPlayer):
+            currentPlayer.points = 0
+            game.nextPlayer()
+            currentPlayer = game.currentPlayer()

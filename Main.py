@@ -4,7 +4,7 @@ import time
 import sys
 from package.Game import wholeGame
 from package.Players import Player
-from package import Shuffle
+from package.Shuffle import *
 from package.Ending import endGame
 from package.Money import table
 from package import Print
@@ -49,7 +49,7 @@ while nbPlayer > 1:
         end.whoWon(game, table.totalMoney())
 
     else:
-        Shuffle.Flop()
+        Flop()
         table.Choice(game)
 
         if game.checkAllIn():
@@ -58,7 +58,7 @@ while nbPlayer > 1:
             end.whoWon(game, table.totalMoney())
 
         else:
-            Shuffle.Turn()
+            Turn()
             table.Choice(game)
 
             if game.checkAllIn():
@@ -67,10 +67,11 @@ while nbPlayer > 1:
                 end.whoWon(game, table.totalMoney())
 
             else:
-                Shuffle.River()
+                River()
                 table.Choice(game)
 
                 Print.endOfRound()
+                printTable(cardsOnTable)
 
                 for _ in range(nbPlayer):
                     currentPlayer.showAllCards()
@@ -78,6 +79,7 @@ while nbPlayer > 1:
                     currentPlayer = game.currentPlayer()
                 end.finalCheck(game)
                 end.whoWon(game, table.totalMoney())
+                end.resetPoints(game)
 
     for a in range(nbPlayer):
         if currentPlayer.wallet == 0:

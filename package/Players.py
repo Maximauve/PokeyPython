@@ -1,7 +1,7 @@
 import os
 import asyncio
-
-
+from .Shuffle import *
+ 
 class Player:
     def __init__(self, name, hand, wallet=1000, allIn=False, points=0, status=True, bet=0):
         self.name = name
@@ -15,6 +15,9 @@ class Player:
     def showCards(self):
         os.system('cls' if os.name == 'nt' else 'clear')
         input(self.name + ", Appuyez sur ENTREE pour visualisez vos cartes")
+        if cardsOnTable[0] != "":
+            print('\n')
+            printTable(cardsOnTable)
         print('\n')
         print(f"Vous possédez la main {self.hand}")
         print('\n')

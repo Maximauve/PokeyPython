@@ -6,13 +6,16 @@ import time
 
 
 def shuffleCards():
-	signes = ("coeur", "carreau", "pique", "trefle")
-	deck = []
+    signes = ("coeur", "carreau", "pique", "trefle")
+    deck = []
     for signe in signes:
         for valeur in range(1, 14):
             deck.append((valeur, signe))
 
     random.shuffle(deck)
+    return deck
+
+deck = shuffleCards()
 
 
 def Hand():  # * Définition de la main
@@ -73,3 +76,4 @@ def round2():
     Turn()
     time.sleep(1)
     River()
+

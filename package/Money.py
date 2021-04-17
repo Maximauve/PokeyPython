@@ -55,7 +55,7 @@ class table:
                 continue
         if bet == player.wallet:
             print("Vous faites Tapis.")
-            self.allin(player)
+            self.allIn(player)
             return
         player.wallet -= bet
         self.money += bet
@@ -119,11 +119,15 @@ class table:
         rep = ""
         for _ in range(nbPlayer):
             roundPlayer(player)
+            if cardsOnTable[0] != "":
+                printTable(cardsOnTable)
+            else:
+                printTableVide()
             if self.currentBet == 0 and player.allIn == False:
-                print("Il n'y a pas encore de mise . Vous pouvez choisir de miser(\"mise\"), de ne rien faire(\"check\"), de faire tapis (\"allin\"),de vous coucher (\"se coucher\") ou encore voir vos cartes (\"cartes\") ")
+                print("Il n'y a pas encore de mise . ")
                 print(f"Vous possédez {player.wallet}€ .")
                 while rep != "mise" or rep != "check" or rep != "tapis" or rep != "se coucher":
-                    rep = input("Que désirez vous faire ? : ")
+                    rep = input("Vous pouvez choisir de miser(\"mise\"), de ne rien faire(\"check\"), de faire tapis (\"allin\"),de vous coucher (\"se coucher\") ou encore voir vos cartes (\"cartes\"). Que désirez vous faire ? : ")
                     if rep == "mise":
                         self.Bet(player)
                         break
@@ -144,10 +148,10 @@ class table:
                             "Mauvaise réponse! veuillez entrer \"mise\", \"check\", \"tapis\", \"se coucher\" ou \"cartes\" ")
             elif player.bet != self.currentBet and player.allIn == False:
                 print(
-                    f"La mise est actuellement de {self.currentBet} €. Vous pouvez choisir de suivre (\"suivre\"), de relancer (\"relance\"), de faire tapis (\"tapis\"), de vous coucher (\"se coucher\") ou de voir vos cartes (\"cartes\") ")
+                    f"La mise est actuellement de {self.currentBet} €.  ")
                 print(f"Vous possédez {player.wallet}€ .")
                 while rep != "relance" or rep != "tapis" or rep != "se coucher" or rep != "suivre":
-                    rep = input("Que désirez vous faire ? : ")
+                    rep = input("Vous pouvez choisir de suivre (\"suivre\"), de relancer (\"relance\"), de faire tapis (\"tapis\"), de vous coucher (\"se coucher\") ou de voir vos cartes (\"cartes\"). Que désirez vous faire ? : ")
                     if rep == "relance":
                         self.Raise(player)
                         break
@@ -175,8 +179,9 @@ class table:
                 player = game.currentPlayer()
                 continue
             while player.bet < self.currentBet:
+                print("\n")
                 print(
-                    f"{player.name}, vous devez vous alligner à la mise actuelle qui est de {self.currentBet}€")
+                    f"{player.name}, vous devez vous alligner à la mise actuelle qui est de {self.currentBet}€. Vous possédez {player.wallet}")
                 res = ""
                 while res != "oui" or res != "o" or res != "y" or res != "non" or res != "n":
                     res = input(

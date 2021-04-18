@@ -22,8 +22,8 @@ n = 1
 while nbPlayer > 1:
 
     Print.nbRound(n)
+    time.sleep(1)
 
-    # * Définition du paquet de carte ici
     deck = shuffleCards()
     dealCards(deck, game)
 
@@ -46,7 +46,11 @@ while nbPlayer > 1:
     table.Ante(game)
     table.Choice(game, 1)
 
-    if game.checkAllIn():
+    if game.checkFoldedPlayers():
+        currentPlayer = game.currentPlayer()
+        end.forfaitWinner(currentPlayer, table.totalMoney())
+
+    elif game.checkAllIn():
         table.allInTotal(1, game, end, deck)
         end.finalCheck(game)
         end.whoWon(game, table.totalMoney())
@@ -55,7 +59,11 @@ while nbPlayer > 1:
         Flop(deck)
         table.Choice(game, 2)
 
-        if game.checkAllIn():
+        if game.checkFoldedPlayers():
+            currentPlayer = game.currentPlayer()
+            end.forfaitWinner(currentPlayer, table.totalMoney())
+
+        elif game.checkAllIn():
             table.allInTotal(2, game, end, deck)
             end.finalCheck(game)
             end.whoWon(game, table.totalMoney())
@@ -64,7 +72,11 @@ while nbPlayer > 1:
             Turn(deck)
             table.Choice(game, 3)
 
-            if game.checkAllIn():
+            if game.checkFoldedPlayers():
+                currentPlayer = game.currentPlayer()
+                end.forfaitWinner(currentPlayer, table.totalMoney())
+
+            elif game.checkAllIn():
                 table.allInTotal(3, game, end, deck)
                 end.finalCheck(game)
                 end.whoWon(game, table.totalMoney())
@@ -93,7 +105,12 @@ while nbPlayer > 1:
         game.nextPlayer()
         currentPlayer = game.currentPlayer()
 
-    cardsOnTable = ["", "", "", "", ""]
+    res = input("Souhaitez vous quitter la partie? (\"oui\"/\"non\") : ")
+    if res == "oui":
+        confirm = input("Êtes-vous sûr? (\"oui\"/\"non\") : ")
+        if confirm == "oui":
+            break
+    print("Vous continuez le jeu.")
     n += 1
 
 print("Fin de Partie, merci d'avoir joué, à très bientôt! :D")

@@ -283,3 +283,9 @@ class endGame:
             currentPlayer.points = 0
             game.nextPlayer()
             currentPlayer = game.currentPlayer()
+
+    def forfaitWinner(self, player, totalMoney):
+        print(
+            f"{player.name}, vos adversaire se sont couché, ce qui fait que vous remportez ma manche.")
+        print(f"Vous gagnez {totalMoney}€")
+        player.wallet += totalMoney

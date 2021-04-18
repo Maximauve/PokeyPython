@@ -1,6 +1,7 @@
 from .Players import Player
 from .Shuffle import *
 from .Print import *
+import time
 
 
 class table:
@@ -113,17 +114,20 @@ class table:
         nbPlayer = game.Count()
         rep = ""
         for _ in range(nbPlayer):
-            roundPlayer(player)
-            if nbRound == 1:
-                printEmptyTable()
-            elif nbRound == 2:
-                printTableFlop(cardsOnTable)
-            elif nbRound == 3:
-                printTableTurn(cardsOnTable)
-            elif nbRound == 4:
-                printTableRiver(cardsOnTable)
+            if game.checkFoldedPlayers():
+                return
             if self.currentBet == 0 and player.allIn == False:
-                print("Il n'y a pas encore de mise . ")
+                roundPlayer(player)
+                if nbRound == 1:
+                    printEmptyTable()
+                elif nbRound == 2:
+                    printTableFlop(cardsOnTable)
+                elif nbRound == 3:
+                    printTableTurn(cardsOnTable)
+                elif nbRound == 4:
+                    printTableRiver(cardsOnTable)
+                print(
+                    f"Il n'y a pas encore de mise pour ce tour. Argent sur la table: {self.money}€")
                 print(f"Vous possédez {player.wallet}€ .")
                 while rep != "mise" or rep != "check" or rep != "tapis" or rep != "se coucher":
                     rep = input("Vous pouvez choisir de miser(\"mise\"), de ne rien faire(\"check\"), de faire tapis (\"allin\"),de vous coucher (\"se coucher\") ou encore voir vos cartes (\"cartes\"). Que désirez vous faire ? : ")
@@ -141,11 +145,20 @@ class table:
                         self.Fold(game, player)
                         break
                     elif rep == "cartes":
-                        player.showCards()
+                        player.showCards(nbRound)
                     else:
                         print(
                             "Mauvaise réponse!")
             elif player.bet != self.currentBet and player.allIn == False:
+                roundPlayer(player)
+                if nbRound == 1:
+                    printEmptyTable()
+                elif nbRound == 2:
+                    printTableFlop(cardsOnTable)
+                elif nbRound == 3:
+                    printTableTurn(cardsOnTable)
+                elif nbRound == 4:
+                    printTableRiver(cardsOnTable)
                 print(
                     f"La mise est actuellement de {self.currentBet} €.  ")
                 print(f"Vous possédez {player.wallet}€ .")
@@ -165,12 +178,13 @@ class table:
                         self.Call(player)
                         break
                     elif rep == "cartes":
-                        player.showCards()
+                        player.showCards(nbRound)
                     else:
                         print(
                             "Mauvaise réponse!")
             game.nextPlayer()
             player = game.currentPlayer()
+            time.sleep(1)
         for _ in range(nbPlayer):
             folded = False
             if player.allIn:

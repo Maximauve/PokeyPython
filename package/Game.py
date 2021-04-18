@@ -84,3 +84,8 @@ class wholeGame:
     def Kill(self, player):
         self.deadPlayers.append(player)
         self.players.pop(self.players.index(player))
+
+    def checkFoldedPlayers(self):
+        if self.Count() == 1:
+            return True
+        return False

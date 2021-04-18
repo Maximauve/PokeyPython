@@ -2,8 +2,6 @@ import random
 from .Print import *
 import time
 
-# * Définition du packet
-
 
 def shuffleCards():
     signes = ("coeur", "carreau", "pique", "trefle")
@@ -47,6 +45,7 @@ def Flop(deck):
     print(
         f"les trois premières carte tirées sont : {cardsOnTable[0]}, {cardsOnTable[1]}, {cardsOnTable[2]}")
     print('\n')
+    time.sleep(1)
 
 
 def Turn(deck):
@@ -58,6 +57,7 @@ def Turn(deck):
     print(
         f"Les cartes présentes sur la Table sont : {cardsOnTable[0]}, {cardsOnTable[1]}, {cardsOnTable[2]}, {cardsOnTable[3]}")
     print('\n')
+    time.sleep(1)
 
 
 def River(deck):
@@ -68,18 +68,15 @@ def River(deck):
     deck.pop(0)
     print(f"Les cartes présentes sur la Table sont : {cardsOnTable}")
     print('\n')
+    time.sleep(1)
 
 
 def All(deck):
     Flop(deck)
-    time.sleep(1)
     Turn(deck)
-    time.sleep(1)
     River(deck)
-    time.sleep(1)
 
 
 def round2(deck):
     Turn(deck)
-    time.sleep(1)
     River(deck)

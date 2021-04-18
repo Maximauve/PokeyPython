@@ -13,12 +13,20 @@ class Player:
         self.status = status
         self.bet = bet
 
-    def showCards(self):
+    def showCards(self, nbRound):
         os.system('cls' if os.name == 'nt' else 'clear')
         input(self.name + ", Appuyez sur ENTREE pour visualisez vos cartes")
-        if cardsOnTable[0] != "":
+        if nbRound == 1:
+            print("")
+        elif nbRound == 2:
             print('\n')
-            printTable(cardsOnTable)
+            printTableFlop(cardsOnTable)
+        elif nbRound == 3:
+            print('\n')
+            printTableTurn(cardsOnTable)
+        elif nbRound == 4:
+            print('\n')
+            printTableRiver(cardsOnTable)
         print('\n')
         print(f"Vous possédez la main {self.hand}")
         print('\n')

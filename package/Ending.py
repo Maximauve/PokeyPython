@@ -271,9 +271,11 @@ class endGame:
                 x.wallet += int(totalMoney / len(equals))
                 winners += f"{x.name}, "
             print(f"{winners}vous avez tous gagné {int(totalMoney / len(equals))}€ !")
+            self.resetPoints(game)
             return equals
         print(f"{winner.name}, tu as gagné {totalMoney}€ !")
         winner.wallet += totalMoney
+        self.resetPoints(game)
         return winner
 
     def resetPoints(self, game):

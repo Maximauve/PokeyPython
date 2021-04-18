@@ -27,6 +27,8 @@ while nbPlayer > 1:
     deck = shuffleCards()
     dealCards(deck, game)
 
+    table.resetMoney()
+
     tab = []
     for i, _ in enumerate(game.sleepingPlayers()):
         tab.append(game.sleepingPlayers()[i])
@@ -94,7 +96,6 @@ while nbPlayer > 1:
                     currentPlayer = game.currentPlayer()
                 end.finalCheck(game)
                 end.whoWon(game, table.totalMoney())
-                end.resetPoints(game)
 
     for a in range(nbPlayer):
         if currentPlayer.wallet == 0:
@@ -114,3 +115,4 @@ while nbPlayer > 1:
     n += 1
 
 print("Fin de Partie, merci d'avoir joué, à très bientôt! :D")
+os.system("pause")

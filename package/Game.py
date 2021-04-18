@@ -41,13 +41,13 @@ class wholeGame:
         return self.players[(self.indexPlayer + 1) % len(self.players)]
 
     def checkAllIn(self):
-        player = self.currentPlayer()
-        a = len(self.players)
         compt = 0
         for _ in range(self.Count()):
+            player = self.currentPlayer()
             if player.allIn == True:
                 compt += 1
-        if compt == a:
+            self.nextPlayer()
+        if compt == (self.Count() - 1):
             return True
         return False
 

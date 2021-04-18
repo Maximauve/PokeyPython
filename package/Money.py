@@ -66,7 +66,7 @@ class table:
             self.allIn(player)
         else:
             player.wallet -= (self.currentBet - player.bet)
-            self.money += self.currentBet
+            self.money += (self.currentBet - player.bet)
             player.bet = self.currentBet
             print(
                 f"Vous vous alignez à la mise précédente qui est de {self.currentBet}€.")
@@ -202,6 +202,7 @@ class table:
                     if res == "oui" or res == "o" or res == "y":
                         print("Vous suivez.")
                         player.wallet -= (self.currentBet - player.bet)
+                        self.money += (self.currentBet - player.bet)
                         player.bet = self.currentBet
                         break
                     elif res == "non" or res == "n":
@@ -239,3 +240,6 @@ class table:
 
     def totalMoney(self):
         return self.money
+
+    def resetMoney(self):
+        self.money = 0

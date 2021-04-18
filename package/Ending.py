@@ -238,9 +238,6 @@ class endGame:
             else:
                 print(
                     f"{currentPlayer.name}, malheurement vous n'avez pas de main...")
-
-            print(
-                f"{currentPlayer.name}, vous marquez {currentPlayer.points} de points")
             print("\n\n")
             game.nextPlayer()
             currentPlayer = game.currentPlayer()

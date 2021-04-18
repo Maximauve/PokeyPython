@@ -1,9 +1,10 @@
 import os
 import asyncio
 from .Shuffle import *
- 
+
+
 class Player:
-    def __init__(self, name, hand, wallet=1000, allIn=False, points=0, status=True, bet=0):
+    def __init__(self, name, hand=["", ""], wallet=1000, allIn=False, points=0, status=True, bet=0):
         self.name = name
         self.hand = hand
         self.wallet = wallet

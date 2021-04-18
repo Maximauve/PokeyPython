@@ -13,20 +13,19 @@ table = table()
 end = endGame()
 game = wholeGame()
 
-# * Initialisation de la partie
 nbPlayer = game.initGame()
 currentPlayer = game.currentPlayer()
-for a in range(nbPlayer):
-    game.promptCards(currentPlayer)
-    print("\n")
-    game.nextPlayer()
-    currentPlayer = game.currentPlayer()
 
 Print.startGame()
 
-# * Boucle principale du jeu
 n = 1
 while nbPlayer > 1:
+
+    Print.nbRound(n)
+
+    # * Définition du paquet de carte ici
+    deck = shuffleCards()
+    dealCards(deck, game)
 
     tab = []
     for i, _ in enumerate(game.sleepingPlayers()):
@@ -38,40 +37,44 @@ while nbPlayer > 1:
             game.nextPlayer()
             currentPlayer = game.currentPlayer()
 
-    Print.nbRound(n)
+    for a in range(nbPlayer):
+        game.promptCards(currentPlayer)
+        print("\n")
+        game.nextPlayer()
+        currentPlayer = game.currentPlayer()
 
     table.Ante(game)
-    table.Choice(game)
+    table.Choice(game, 1)
 
     if game.checkAllIn():
-        table.allInTotal(1, game, end)
+        table.allInTotal(1, game, end, deck)
         end.finalCheck(game)
         end.whoWon(game, table.totalMoney())
 
     else:
-        Flop()
-        table.Choice(game)
+        Flop(deck)
+        table.Choice(game, 2)
 
         if game.checkAllIn():
-            table.allInTotal(2, game, end)
+            table.allInTotal(2, game, end, deck)
             end.finalCheck(game)
             end.whoWon(game, table.totalMoney())
 
         else:
-            Turn()
-            table.Choice(game)
+            Turn(deck)
+            table.Choice(game, 3)
 
             if game.checkAllIn():
-                table.allInTotal(3, game, end)
+                table.allInTotal(3, game, end, deck)
                 end.finalCheck(game)
                 end.whoWon(game, table.totalMoney())
 
             else:
-                River()
-                table.Choice(game)
+                River(deck)
+                table.Choice(game, 4)
 
                 Print.endOfRound()
-                printTable(cardsOnTable)
+                printTableRiver(cardsOnTable)
 
                 for _ in range(nbPlayer):
                     currentPlayer.showAllCards()
@@ -90,6 +93,7 @@ while nbPlayer > 1:
         game.nextPlayer()
         currentPlayer = game.currentPlayer()
 
+    cardsOnTable = ["", "", "", "", ""]
     n += 1
 
 print("Fin de Partie, merci d'avoir joué, à très bientôt! :D")

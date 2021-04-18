@@ -13,24 +13,31 @@ def shuffleCards():
             deck.append((valeur, signe))
 
     random.shuffle(deck)
+
     return deck
 
-deck = shuffleCards()
 
+def dealCards(deck, game):  # * Définition de la main
+    currentPlayer = game.currentPlayer()
 
-def Hand():  # * Définition de la main
-    main = ["", ""]
-    for y in range(2):
-        main[y] = deck[0]
-        deck.pop(0)
-    return main
+    for _ in range(game.Count()):
+        currentPlayer.hand = ["", ""]
+        game.nextPlayer()
+        currentPlayer = game.currentPlayer()
+
+    for a in range(2):
+        for y in range(game.Count()):
+            currentPlayer.hand[a] = deck[0]
+            deck.pop(0)
+            game.nextPlayer()
+            currentPlayer = game.currentPlayer()
 
 
 cardsOnTable = ["", "", "", "", ""]
 trash = []
 
 
-def Flop():
+def Flop(deck):
     printFlop()
     trash.append(deck[0])
     deck.pop(0)
@@ -42,7 +49,7 @@ def Flop():
     print('\n')
 
 
-def Turn():
+def Turn(deck):
     printTurn()
     trash.append(deck[0])
     deck.pop(0)
@@ -53,7 +60,7 @@ def Turn():
     print('\n')
 
 
-def River():
+def River(deck):
     printRiver()
     trash.append(deck[0])
     deck.pop(0)
@@ -63,17 +70,16 @@ def River():
     print('\n')
 
 
-def All():
-    Flop()
+def All(deck):
+    Flop(deck)
     time.sleep(1)
-    Turn()
+    Turn(deck)
     time.sleep(1)
-    River()
+    River(deck)
     time.sleep(1)
 
 
-def round2():
-    Turn()
+def round2(deck):
+    Turn(deck)
     time.sleep(1)
-    River()
-
+    River(deck)

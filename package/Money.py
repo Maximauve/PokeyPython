@@ -1,11 +1,6 @@
 from .Players import Player
-from .Game import wholeGame
 from .Shuffle import *
 from .Print import *
-
-# td 	--> Pour les blindes : noter qu'ils ont déjà "misés" (la petite blinde a déjà misé 10€, et la grosse 20€)
-# td 	--> Le pot, à donner au vainqueur
-# td 	-->
 
 
 class table:
@@ -113,16 +108,20 @@ class table:
         player.status = False
         game.foldPlayer(player)
 
-    def Choice(self, game):
+    def Choice(self, game, nbRound):
         player = game.currentPlayer()
         nbPlayer = game.Count()
         rep = ""
         for _ in range(nbPlayer):
             roundPlayer(player)
-            if cardsOnTable[0] != "":
-                printTable(cardsOnTable)
-            else:
-                printTableVide()
+            if nbRound == 1:
+                printEmptyTable()
+            elif nbRound == 2:
+                printTableFlop(cardsOnTable)
+            elif nbRound == 3:
+                printTableTurn(cardsOnTable)
+            elif nbRound == 4:
+                printTableRiver(cardsOnTable)
             if self.currentBet == 0 and player.allIn == False:
                 print("Il n'y a pas encore de mise . ")
                 print(f"Vous possédez {player.wallet}€ .")
@@ -145,7 +144,7 @@ class table:
                         player.showCards()
                     else:
                         print(
-                            "Mauvaise réponse! veuillez entrer \"mise\", \"check\", \"tapis\", \"se coucher\" ou \"cartes\" ")
+                            "Mauvaise réponse!")
             elif player.bet != self.currentBet and player.allIn == False:
                 print(
                     f"La mise est actuellement de {self.currentBet} €.  ")
@@ -169,7 +168,7 @@ class table:
                         player.showCards()
                     else:
                         print(
-                            "Mauvaise réponse! veuillez entrer \"suivre\", \"relance\", \"tapis\", \"se coucher\" ou \"cartes\"")
+                            "Mauvaise réponse!")
             game.nextPlayer()
             player = game.currentPlayer()
         for _ in range(nbPlayer):
@@ -188,7 +187,7 @@ class table:
                         "Voulez vous vous mettre à niveau de la mise? (oui/non) : ")
                     if res == "oui" or res == "o" or res == "y":
                         print("Vous suivez.")
-                        player.wallet -= (player.bet - self.currentBet)
+                        player.wallet -= (self.currentBet - player.bet)
                         player.bet = self.currentBet
                         break
                     elif res == "non" or res == "n":
@@ -210,7 +209,7 @@ class table:
             game.nextPlayer()
             player = game.currentPlayer()
 
-    def allInTotal(self, nbRound, game, end):
+    def allInTotal(self, nbRound, game, end, deck):
         nbPlayer = game.Count()
         currentPlayer = game.currentPlayer()
         for _ in range(nbPlayer):
@@ -218,11 +217,11 @@ class table:
             game.nextPlayer()
             currentPlayer = game.currentPlayer()
         if nbRound == 1:
-            All()
+            All(deck)
         elif nbRound == 2:
-            round2()
+            round2(deck)
         elif nbRound == 3:
-            River()
+            River(deck)
 
     def totalMoney(self):
         return self.money

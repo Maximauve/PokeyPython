@@ -1,5 +1,4 @@
 from .Players import Player
-from .Shuffle import Hand
 
 
 class wholeGame:
@@ -27,7 +26,7 @@ class wholeGame:
                 print("Nombre de joueurs invalide\nRéessayez !")
 
         for a in range(nbPlayers):
-            players += [Player(input(f"Nom du joueur {a+1}: "), Hand())]
+            players += [Player(input(f"Nom du joueur {a+1}: "))]
         self.players = players
         return nbPlayers
 

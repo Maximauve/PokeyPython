@@ -26,8 +26,6 @@ def roundPlayer(joueur):
     o--------------------------------------------o''')
 
 
-
-
 def endOfRound():
     print('''
    o-----------------------------------o
@@ -59,20 +57,34 @@ def printRiver():
 	o-----------------------------------o
 	''')
 
-def printTableVide():
-	print('''
+
+def printEmptyTable():
+    print('''
 	o-----------------------------------o
 	|  La table est actuellement vide   |
 	o-----------------------------------o
 	''')
 
-def printTable(cardsOnTable):
-	cards = cardsOnTable
-	phrase = "La table actuelle est "
-	for x in cards:
-		phrase += f"{x} "
-	print(f'''
-    o--------------------------------------------o
-    {phrase}
-    o--------------------------------------------o
+
+def printTableFlop(cardsOnTable):
+    print(f'''
+    o-----------------------------------------------------------------o
+    | La table actuelle est: {cardsOnTable[0]} {cardsOnTable[1]} {cardsOnTable[2]} |
+    o-----------------------------------------------------------------o
+    ''')
+
+
+def printTableTurn(cardsOnTable):
+    print(f'''
+    o------------------------------------------------------------------------------o
+    | La table actuelle est: {cardsOnTable[0]} {cardsOnTable[1]} {cardsOnTable[2]} {cardsOnTable[3]} |
+    o------------------------------------------------------------------------------o
+    ''')
+
+
+def printTableRiver(cardsOnTable):
+    print(f'''
+    o-------------------------------------------------------------------------------------------o
+    | La table actuelle est: {cardsOnTable[0]} {cardsOnTable[1]} {cardsOnTable[2]} {cardsOnTable[3]} {cardsOnTable[4]} |
+    o-------------------------------------------------------------------------------------------o
     ''')

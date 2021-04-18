@@ -1,5 +1,4 @@
 from .Shuffle import cardsOnTable
-from .Game import wholeGame
 from .Money import table
 
 table = table()
@@ -10,8 +9,6 @@ table = table()
 # * Value[1] --> Retourne la valeur gagnée
 # * Value[2] --> Complément (optionnel)
 
-
-# td Mattéo, vérifies les petits trucs chiants, pour les double paire et full (gérer le cas de quand ils ont tous les deux le même combo fort) ----> si on a le temps (ça sera pas le cas)
 class endGame:
     def __init__(self, tab=cardsOnTable):
         self.tab = tab
@@ -253,20 +250,19 @@ class endGame:
         currentPlayer = game.currentPlayer()
         multiWin = False
         nbPointWinner = 0
+        print(f"totalMoney ---> {totalMoney}")
         equals = []
+
         for _ in range(nbPlayer):
             if currentPlayer.points > nbPointWinner:
                 nbPointWinner = currentPlayer.points
                 winner = currentPlayer
+                equals = []
+                equals.append(winner)
                 multiWin = False
             elif currentPlayer.points == nbPointWinner:
                 multiWin = True
                 equals.append(currentPlayer)
-                for x in equals:
-                    if x == winner:
-                        break
-                else:
-                    equals.append(winner)
             game.nextPlayer()
             currentPlayer = game.currentPlayer()
         if multiWin:
@@ -280,7 +276,7 @@ class endGame:
         winner.wallet += totalMoney
         return winner
 
-    def resetPoints(self,game):
+    def resetPoints(self, game):
         nbPlayer = game.Count()
         currentPlayer = game.currentPlayer()
         for _ in range(nbPlayer):

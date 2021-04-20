@@ -57,7 +57,7 @@ class wholeGame:
             confirm = input(
                 player.name + ", Voulez vous voir vos cartes? (oui/non)")
             if confirm == "yes" or confirm == "oui" or confirm == "o" or confirm == "y" or confirm == "Y":
-                player.showCards()
+                player.showCards(1)
                 validAns = True
             elif confirm == "no" or confirm == "non" or confirm == "n" or confirm == "N":
                 print("Vous n'avez pas voulu voir vos cartes.")

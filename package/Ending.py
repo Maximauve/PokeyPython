@@ -247,7 +247,6 @@ class endGame:
         currentPlayer = game.currentPlayer()
         multiWin = False
         nbPointWinner = 0
-        print(f"totalMoney ---> {totalMoney}")
         equals = []
 
         for _ in range(nbPlayer):

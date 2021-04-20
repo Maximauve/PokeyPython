@@ -97,7 +97,7 @@ while nbPlayer > 1:
                     currentPlayer.showAllCards()
                     game.nextPlayer()
                     currentPlayer = game.currentPlayer()
-                    print(f"Argent sur la table: {table.totalMoney()} €")
+                print(f"Argent sur la table: {table.totalMoney()} €")
                 end.finalCheck(game)
                 end.whoWon(game, table.totalMoney())
 

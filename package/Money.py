@@ -160,7 +160,7 @@ class table:
                 elif nbRound == 4:
                     printTableRiver(cardsOnTable)
                 print(
-                    f"La mise est actuellement de {self.currentBet} €.  ")
+                    f"La mise est actuellement de {self.currentBet} €. Argent sur la table: {self.money}€ ")
                 print(f"Vous possédez {player.wallet}€ .")
                 while rep != "relance" or rep != "tapis" or rep != "se coucher" or rep != "suivre":
                     rep = input("Vous pouvez choisir de suivre (\"suivre\"), de relancer (\"relance\"), de faire tapis (\"tapis\"), de vous coucher (\"se coucher\") ou de voir vos cartes (\"cartes\"). Que désirez vous faire ? : ")

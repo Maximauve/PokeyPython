@@ -88,9 +88,9 @@ class table:
                 currentRaise = 0
                 continue
         print(f"Vous avez relancé de {currentRaise}€")
-        player.wallet -= currentRaise
-        self.money += currentRaise
         self.currentBet += currentRaise
+        self.money += self.currentBet
+        player.wallet -= self.currentBet
         player.bet = self.currentBet
 
     def Check(self, player):  # * Check
@@ -194,7 +194,7 @@ class table:
             while player.bet < self.currentBet:
                 print("\n")
                 print(
-                    f"{player.name}, vous devez vous alligner à la mise actuelle qui est de {self.currentBet}€. Vous possédez {player.wallet}")
+                    f"{player.name}, vous devez vous alligner à la mise actuelle qui est de {self.currentBet}€. Vous possédez {player.wallet}€  | Argent sur la table --> {self.money} €")
                 res = ""
                 while res != "oui" or res != "o" or res != "y" or res != "non" or res != "n":
                     res = input(

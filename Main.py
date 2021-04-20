@@ -34,10 +34,11 @@ while nbPlayer > 1:
         tab.append(game.sleepingPlayers()[i])
     for player in tab:
         game.wakeUp(player)
-        for _ in range(nbPlayer):
-            currentPlayer.allIn = False
-            game.nextPlayer()
-            currentPlayer = game.currentPlayer()
+
+    for _ in range(nbPlayer):
+        currentPlayer.allIn = False
+        game.nextPlayer()
+        currentPlayer = game.currentPlayer()
 
     for a in range(nbPlayer):
         game.promptCards(currentPlayer)
@@ -90,33 +91,46 @@ while nbPlayer > 1:
                 River(deck)
                 table.Choice(game, 4)
 
-                Print.endOfRound()
-                printTableRiver(cardsOnTable)
-
-                for _ in range(nbPlayer):
-                    currentPlayer.showAllCards()
-                    game.nextPlayer()
+                if game.checkFoldedPlayers():
                     currentPlayer = game.currentPlayer()
-                print(f"Argent sur la table: {table.totalMoney()} €")
-                end.finalCheck(game)
-                end.whoWon(game, table.totalMoney())
+                    end.forfaitWinner(currentPlayer, table.totalMoney())
 
+                else:
+                    Print.endOfRound()
+                    printTableRiver(cardsOnTable)
+
+                    for _ in range(nbPlayer):
+                        currentPlayer.showAllCards()
+                        game.nextPlayer()
+                        currentPlayer = game.currentPlayer()
+                    print(f"Argent sur la table: {table.totalMoney()} €")
+                    end.finalCheck(game)
+                    end.whoWon(game, table.totalMoney())
+
+    toKill = []
+    nbKill = 0
     for a in range(nbPlayer):
         if currentPlayer.wallet == 0:
             nbPlayer -= 1
             print(
                 f"{currentPlayer.name}, vous n'avez malheureusement plus d'argent, vous quittez donc la partie.")
-            game.Kill(currentPlayer)
+            toKill.append(currentPlayer)
+            nbKill += 1
         game.nextPlayer()
         currentPlayer = game.currentPlayer()
 
-    res = input("Souhaitez vous quitter la partie? (\"oui\"/\"non\") : ")
-    if res == "oui":
-        confirm = input("Êtes-vous sûr? (\"oui\"/\"non\") : ")
-        if confirm == "oui":
-            break
-    print("Vous continuez le jeu.")
-    n += 1
+    if len(toKill) > 0:
+        for a in range(nbKill):
+            game.Kill(toKill[a])
+
+    if nbPlayer > 1:
+        res = input("Souhaitez vous quitter la partie? (\"oui\"/\"non\") : ")
+        if res == "oui":
+            confirm = input("Êtes-vous sûr? (\"oui\"/\"non\") : ")
+            if confirm == "oui":
+                break
+        print("Vous continuez le jeu.")
+        n += 1
 
 print("Fin de Partie, merci d'avoir joué, à très bientôt! :D")
 os.system("pause")

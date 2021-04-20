@@ -54,6 +54,7 @@ while nbPlayer > 1:
 
     elif game.checkAllIn():
         table.allInTotal(1, game, end, deck)
+        print(f"Argent sur la table: {table.totalMoney()} €")
         end.finalCheck(game)
         end.whoWon(game, table.totalMoney())
 
@@ -67,6 +68,7 @@ while nbPlayer > 1:
 
         elif game.checkAllIn():
             table.allInTotal(2, game, end, deck)
+            print(f"Argent sur la table: {table.totalMoney()} €")
             end.finalCheck(game)
             end.whoWon(game, table.totalMoney())
 
@@ -80,6 +82,7 @@ while nbPlayer > 1:
 
             elif game.checkAllIn():
                 table.allInTotal(3, game, end, deck)
+                print(f"Argent sur la table: {table.totalMoney()} €")
                 end.finalCheck(game)
                 end.whoWon(game, table.totalMoney())
 
@@ -94,6 +97,7 @@ while nbPlayer > 1:
                     currentPlayer.showAllCards()
                     game.nextPlayer()
                     currentPlayer = game.currentPlayer()
+                    print(f"Argent sur la table: {table.totalMoney()} €")
                 end.finalCheck(game)
                 end.whoWon(game, table.totalMoney())
 

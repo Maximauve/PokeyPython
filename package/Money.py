@@ -130,7 +130,7 @@ class table:
                     f"Il n'y a pas encore de mise pour ce tour. Argent sur la table: {self.money}€")
                 print(f"Vous possédez {player.wallet}€ .")
                 while rep != "mise" or rep != "check" or rep != "tapis" or rep != "se coucher":
-                    rep = input("Vous pouvez choisir de miser(\"mise\"), de ne rien faire(\"check\"), de faire tapis (\"allin\"),de vous coucher (\"se coucher\") ou encore voir vos cartes (\"cartes\"). Que désirez vous faire ? : ")
+                    rep = input("Vous pouvez choisir de miser(\"mise\"), de ne rien faire(\"check\"), de faire tapis (\"tapis\"),de vous coucher (\"se coucher\") ou encore voir vos cartes (\"cartes\"). Que désirez vous faire ? : ")
                     if rep == "mise":
                         self.Bet(player)
                         break
